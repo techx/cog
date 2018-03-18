@@ -1,0 +1,93 @@
+{% extends "includes/nav.html" %}
+{% block title %} Inventory {% endblock %}
+{% block panel %}
+
+{% from 'includes/macros/display_item.html' import display_item %}
+{% from 'includes/macros/display_requests.html' import display_requests %}
+{% from 'includes/macros/item_form.html' import item_form %}
+
+{% if user.is_admin %}
+<div class="ui secondary menu">
+    <a class="ui icon item" href="#" id="add-inventory"> <i id="add-inventory" class="plus icon"></i> &nbsp; Add Item</a>
+    <a class="ui icon item" href="#" id="autoadd-inventory"><i class="upload icon"></i> &nbsp; Import Google Sheet</a>
+    
+    <div id="add-form" class="ui modal">
+        {{ item_form("Add Item", url_for('inventory_add')) }}
+    </div>
+    <div id="auto-add-form" class="ui modal">
+        <div class="header"> Import from Spreadsheet </div>
+        <div class="content">
+            <form class="ui form" method="post">
+                <div class="field">
+                    <input type="text" name="url" placeholder="url"> 
+                </div>
+                <button class="ui primary import-form primary button" type="submit">Import</button>
+                <div class="ui error message"></div> 
+            </form> 
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% macro accordion_list(items, id) -%}
+    <div class="ui text menu">
+    <div class="header item"> <h4> Categories </h4> </div>
+    <a accordion="{{ id }}" mode="expand" class="ui icon item expand-accordion" href="#"> <i class="plus icon"></i> &nbsp; Expand All</a>
+    </div>
+    <div class="ui accordion" id="{{ id }}" size="{{ items | length }}">
+    {% for category in items | groupby('category') %} 
+        <div class="title">
+            <i class="dropdown icon"></i>
+            {{ category.grouper }} 
+        </div>
+        <div class="content">
+            <div class="ui stackable grid">
+                {% for item in category.list %}
+                    {{ display_item(item, user.is_admin, True) }}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{%- endmacro %}
+
+<div class="ui stackable two column grid">
+    <div class="row">
+        <div class="eleven wide column" id="inventory">
+            {% if lottery_items %}
+                <h2>Lottery Required</h2>
+                <span> {{ config['LOTTERY_TEXT'] }} </span>
+
+                {{ accordion_list(lottery_items, "lottery_accordion") }}
+            {% endif %}
+
+            {% if checkout_items %}
+                <h2>Checkout Required</h2>
+                <span> {{ config['CHECKOUT_TEXT'] }} </span>
+
+                {{ accordion_list(checkout_items, "checkout_accordion") }}
+            {% endif %}
+
+            {% if free_items %}
+                <h2>No Checkout Required</h2>
+                <span> {{ config['FREE_TEXT'] }} </span>
+
+                {{ accordion_list(free_items, "free_accordion") }}
+            {% endif %}
+        </div>
+        <div class="five wide column">
+            <div class="ui sticky">
+            <h2>My Requests</h2>
+            <div id="my_requests">
+                {{ display_requests(requests, RequestStatus, admin=False, time=False) }}
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='scripts/inventory.js') }}"></script>
+{% endblock %}

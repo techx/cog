@@ -1,0 +1,13 @@
+*.pyc
+*.swp
+*.swo
+i.*.swp
+.*.swo
+.webassets-cache
+.sass-cache/
+private
+delete_db.py
+env/
+.env
+node_modules/
+.DS_Store
