@@ -1,4 +1,8 @@
 import os
+
+TEST_DB="sqlite:///test_db"
+os.environ['DATABASE_URL'] = TEST_DB # sets DB URL for this process 
+
 import hardwarecheckout 
 from hardwarecheckout.config import SECRET
 import unittest
@@ -18,11 +22,8 @@ from hardwarecheckout.models.request_item import RequestItem
 from flask import url_for, json
 import pytest
 
-TEST_DB="sqlite:///test_db"
-
 @pytest.fixture
 def app():
-    hardwarecheckout.app.config['SQLALCHEMY_DATABASE_URI'] = TEST_DB 
     hardwarecheckout.app.config['TESTING'] = True
     hardwarecheckout.app.config['DEBUG'] = False
     app = hardwarecheckout.app.test_client()
