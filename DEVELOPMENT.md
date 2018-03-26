@@ -25,3 +25,15 @@ could look like `postgres://username:password@localhost/cog`.
 
 ## Tests 
 - Run `make test` to run all tests
+
+## Customizing Semantic Themes
+In order to build Semantic you must have node, npm, and gulp installed. 
+
+- Run `npm install semantic-ui` in the root directory to install the Semantic
+UI source and build tool dependencies 
+  - When prompted by the install script, select `Yes, extend current installation` 
+  - Continue with default install options until prompted to choose an install 
+  directory (`Where should we put Semantic UI inside your project?`) 
+    - Enter the existing Semantic directory: `hardwarecheckout/static/vendor/semantic/` 
+- Navigate to the Semantic directory and run `gulp build` in order to build Semantic UI 
+  - You must run `gulp build` any time you tweak a theme for the change to take effect

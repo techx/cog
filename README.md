@@ -77,7 +77,9 @@ on the main inventory page.
 ### Customizing Branding
 Cog uses the [Semantic UI](https://semantic-ui.com/) framework for styling.
 Branding can easily be customized using Semantic UI
-[themes](https://semantic-ui.com/usage/theming.html).
+[themes](https://semantic-ui.com/usage/theming.html). See 
+[here](DEVELOPMENT.md#customizing-semantic-themes) for info on how to build 
+Cog's Semantic UI installation.
 
 While Cog mostly uses default Semantic UI styling, a minimal amount of custom
 CSS lives in `hardwarecheckout/static/sass/app.scss`. In order to rebuild the
