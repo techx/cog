@@ -31,7 +31,7 @@ In order to build Semantic you must have node, npm, and gulp installed.
 
 - Run `npm install semantic-ui` in the root directory to install the Semantic
 UI source and build tool dependencies 
-  - When prompted by the install script, select `Yes, extend current installation` 
+  - When prompted by the install script, select `Yes, extend my current settings.` 
   - Continue with default install options until prompted to choose an install 
   directory (`Where should we put Semantic UI inside your project?`) 
     - Enter the existing Semantic directory: `hardwarecheckout/static/vendor/semantic/` 
