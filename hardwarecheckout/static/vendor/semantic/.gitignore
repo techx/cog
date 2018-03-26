@@ -1,0 +1,4 @@
+src/**/site/
+src/themes/*
+!src/themes/default
+!src/themes/hackmit

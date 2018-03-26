@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.2.11 - Button
+ * # Semantic UI 2.3.1 - Button
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -784,7 +784,7 @@
   background: rgba(0, 0, 0, 0.05) !important;
   -webkit-box-shadow: '' !important;
           box-shadow: '' !important;
-  color: rgba(0, 0, 0, 0.95);
+  color: rgba(0, 0, 0, 0.95) !important;
 }
 .ui.basic.buttons .active.button:hover,
 .ui.basic.active.button:hover {

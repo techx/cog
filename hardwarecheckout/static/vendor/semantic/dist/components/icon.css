@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.2.11 - Icon
+ * # Semantic UI 2.3.1 - Icon
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -112,7 +112,7 @@ i.disabled.icon {
 
 i.fitted.icon {
   width: auto;
-  margin: 0em;
+  margin: 0em !important;
 }
 
 /*-------------------
