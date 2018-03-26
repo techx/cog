@@ -1,4 +1,9 @@
-src/**/site/
+# ignore src and build system
+src/site/
+src/definitions/
+theme.less
+semantic.less
+gulpfile.js
+tasks/
 src/themes/*
-!src/themes/default
 !src/themes/hackmit
