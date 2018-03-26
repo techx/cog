@@ -11,6 +11,7 @@ env/
 test_db
 .env
 node_modules/
+package-lock.json
 .DS_Store
 __pycache__
 .cache/
