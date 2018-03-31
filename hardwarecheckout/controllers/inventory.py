@@ -79,6 +79,7 @@ def inventory():
             lottery_items = lottery_query.filter_by(is_visible = True).all(),
             checkout_items = checkout_query.filter_by(is_visible = True).all(),
             free_items = free_query.filter_by(is_visible = True).all(),
+            counts = counts,
             requests = requests,
             RequestStatus=RequestStatus, user=user)
 
