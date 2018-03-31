@@ -20,6 +20,8 @@ from hardwarecheckout.sheets_csv import get_csv, SheetsImportError
 from flask import jsonify
 from werkzeug.datastructures import MultiDict
 
+from sqlalchemy import func
+
 import urllib2
 import urlparse
 import requests
@@ -48,28 +50,35 @@ def inventory():
         item_type = ItemType.CHECKOUT)
     free_query = InventoryEntry.query.filter_by(
         item_type = ItemType.FREE)
-    
+    # replaces property quantity for each item
+    counts = db.session.query(Item.entry_id, func.count(Item.entry_id))\
+            .group_by(Item.entry_id)\
+            .filter_by(user_id = None)\
+            .all()
+    counts = {id_: count for (id_, count) in counts}
+
     if user:
-        requests = Request.query.filter(Request.user == user, 
+        requests = Request.query.filter(Request.user == user,
             Request.status.in_(
-            [RequestStatus.APPROVED, 
-            RequestStatus.SUBMITTED, 
+            [RequestStatus.APPROVED,
+            RequestStatus.SUBMITTED,
             RequestStatus.DENIED])).all()
-    else: 
+    else:
         requests = [] # if not logged in, we have no requests to display
 
-    if user and user.is_admin: 
-        return render_template('pages/inventory.html', 
-            lottery_items = lottery_query.all(), 
+    if user and user.is_admin:
+        return render_template('pages/inventory.html',
+            lottery_items = lottery_query.all(),
             checkout_items = checkout_query.all(),
-            free_items = free_query.all(), 
+            free_items = free_query.all(),
+            counts = counts,
             requests = requests,
             RequestStatus=RequestStatus, user=user)
     else:
-        return render_template('pages/inventory.html', 
-            lottery_items = lottery_query.filter_by(is_visible = True).all(), 
+        return render_template('pages/inventory.html',
+            lottery_items = lottery_query.filter_by(is_visible = True).all(),
             checkout_items = checkout_query.filter_by(is_visible = True).all(),
-            free_items = free_query.filter_by(is_visible = True).all(), 
+            free_items = free_query.filter_by(is_visible = True).all(),
             requests = requests,
             RequestStatus=RequestStatus, user=user)
 

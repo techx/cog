@@ -1,4 +1,5 @@
-{% macro display_item(item, admin=False, requestable=False) -%}
+{% macro display_item(item, counts, admin=False, requestable=False) -%}
+{% set count = counts.get(item.id, 0) %}
 <div class="row" >
     <div class="ten wide column">
         <div class="ui items">
@@ -40,14 +41,14 @@
     </div>
     <div class="six wide right aligned column">
     {% if requestable %} 
-        {% if item.requires_checkout and (item.quantity == 0 and not config['ENABLE_WAITLIST']) %}
+        {% if item.requires_checkout and (count == 0 and not config['ENABLE_WAITLIST']) %}
             <div> <strong>Out of stock!</strong> </div> 
             <br>
         {% else %}
             {% if (admin and (item.requires_checkout or item.requires_lottery)) 
                 or (item.requires_checkout and config['DISPLAY_CHECKOUT_QUANTITY']) 
                 or (item.requires_lottery and config['DISPLAY_LOTTERY_QUANTITY']) %}
-                <div> <strong>Quantity:</strong> {{ item.quantity }} </div> 
+                <div> <strong>Quantity:</strong> {{ count }} </div> 
                 <br>
             {% endif %}
             {% if item.requires_checkout and not item.requires_lottery %}
@@ -55,7 +56,7 @@
                 <div class="ui action input">
                     <input type="number" name="quantity" value="1" min="1" max="5">
                     <button data-item-id="{{ item.id }}" type="submit" class="ui primary submit button">
-                    {% if item.quantity > 0 %}
+                    {% if count > 0 %}
                         Request Now                            
                     {% else %}
                         Add To Waitlist
