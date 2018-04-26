@@ -43,7 +43,7 @@
         <div class="content">
             <div class="ui stackable grid">
                 {% for item in category.list %}
-                    {{ display_item(item, user.is_admin, True) }}
+                    {{ display_item(item, counts, user.is_admin, True) }}
                 {% endfor %}
             </div>
         </div>

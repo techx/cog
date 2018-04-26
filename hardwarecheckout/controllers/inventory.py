@@ -8,6 +8,7 @@ from hardwarecheckout.models.inventory_entry import InventoryEntry
 from hardwarecheckout.models.inventory_entry import ItemType
 from hardwarecheckout.models.user import User
 from hardwarecheckout.models.request import Request, RequestStatus
+from hardwarecheckout.models.request_item import RequestItem
 
 from hardwarecheckout.forms.inventory_form import InventoryForm
 from hardwarecheckout.forms.inventory_update_form import InventoryUpdateForm
@@ -19,6 +20,8 @@ from hardwarecheckout.sheets_csv import get_csv, SheetsImportError
 
 from flask import jsonify
 from werkzeug.datastructures import MultiDict
+
+from sqlalchemy import func
 
 import urllib2
 import urlparse
@@ -48,28 +51,46 @@ def inventory():
         item_type = ItemType.CHECKOUT)
     free_query = InventoryEntry.query.filter_by(
         item_type = ItemType.FREE)
-    
+
+    # total number of items that exist by id
+    total_item_quants = db.session.query(Item.entry_id, func.count(Item.entry_id))\
+            .group_by(Item.entry_id)\
+            .all()
+    # total number of items that have been requested and approved/fulfilled
+    requested_quants  = db.session.query(RequestItem.entry_id, func.count(RequestItem.entry_id))\
+            .group_by(RequestItem.entry_id)\
+            .filter(RequestItem.request_id == Request.id,
+                    Request.status.in_([RequestStatus.APPROVED,
+                                        RequestStatus.FULFILLED]))\
+            .all()
+    requested_quants = {id_: count for (id_, count) in requested_quants}
+
+    # number of items that are free to request
+    counts = {id_: count - requested_quants.get(id_, 0) for (id_, count) in total_item_quants}
+
     if user:
-        requests = Request.query.filter(Request.user == user, 
+        requests = Request.query.filter(Request.user == user,
             Request.status.in_(
-            [RequestStatus.APPROVED, 
-            RequestStatus.SUBMITTED, 
+            [RequestStatus.APPROVED,
+            RequestStatus.SUBMITTED,
             RequestStatus.DENIED])).all()
-    else: 
+    else:
         requests = [] # if not logged in, we have no requests to display
 
-    if user and user.is_admin: 
-        return render_template('pages/inventory.html', 
-            lottery_items = lottery_query.all(), 
+    if user and user.is_admin:
+        return render_template('pages/inventory.html',
+            lottery_items = lottery_query.all(),
             checkout_items = checkout_query.all(),
-            free_items = free_query.all(), 
+            free_items = free_query.all(),
+            counts = counts,
             requests = requests,
             RequestStatus=RequestStatus, user=user)
     else:
-        return render_template('pages/inventory.html', 
-            lottery_items = lottery_query.filter_by(is_visible = True).all(), 
+        return render_template('pages/inventory.html',
+            lottery_items = lottery_query.filter_by(is_visible = True).all(),
             checkout_items = checkout_query.filter_by(is_visible = True).all(),
-            free_items = free_query.filter_by(is_visible = True).all(), 
+            free_items = free_query.filter_by(is_visible = True).all(),
+            counts = counts,
             requests = requests,
             RequestStatus=RequestStatus, user=user)
 

@@ -40,6 +40,10 @@ def request_item(app, id):
         quantity=1), 
         follow_redirects=True)
 
+def approve_request(app, id_):
+    return app.post('/request/{}/approve'.format(id_),
+                    follow_redirects=True)
+
 @contextmanager
 def captured_templates(app):
     recorded = []

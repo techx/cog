@@ -163,3 +163,51 @@ def test_run_all_lotteries(app, admin):
     for item in items:
         assert RequestItem.query.filter_by(entry_id=item.id) \
                 .join(Request).filter_by(status=RequestStatus.APPROVED).count() == 3
+
+def test_quantities_correct(app, admin):
+    def quantities_correct(expected_counts):
+        """ Checks that loading the index page produces expected quantities.
+            expected_counts - a list of tuples with form
+                                (inventory_entry_name, count)
+        """
+        with captured_templates(hardwarecheckout.app) as templates:
+            rv = app.get('/', follow_redirects=True)
+            counts = templates[0][1]["counts"]
+            for (name, num) in expected_counts:
+                id_ = InventoryEntry.query.filter_by(name=name).one().id
+                actual_quant = counts.get(id_, 0)
+                if actual_quant != num:
+                    print("Unexpected quantity {} for item {}".format(actual_quant,
+                                                                      name))
+                    return False
+        return True
+
+    # add item with 1, item with 0 and item with 5 to the database
+    item_0_quant = InventoryEntry('Item0', 'Wow lick my socks',
+                                  'http://test.co', 'Item', [], '', 0)
+    item_1_quant = InventoryEntry('Item1', 'Wow lick my socks',
+                                  'http://test.co', 'Item', [], '', 1)
+    item_5_quant = InventoryEntry('Item5', 'Wow lick my socks',
+                                  'http://test.co', 'Item', [], '', 5)
+    db.session.add(item_0_quant)
+    db.session.add(item_1_quant)
+    db.session.add(item_5_quant)
+
+    # Confirm on index page that quantities are correct
+    expected_initial_quantities = [('Item0', 0), ('Item1', 1), ('Item5', 5)]
+    assert quantities_correct(expected_initial_quantities)
+
+    # needed to request_items
+    update_user(app)
+
+    # request and approve each item
+    ids = [entry.id for entry in InventoryEntry.query.all()]
+    for id_ in ids:
+        request_item(app, id_)
+    ids = [req.id for req in Request.query.all()]
+    for id_ in ids:
+        approve_request(app, id_)
+
+    # confirm updated quantities correct
+    expected_post_quantities = [('Item0', 0), ('Item1', 0), ('Item5', 4)]
+    assert quantities_correct(expected_post_quantities)
