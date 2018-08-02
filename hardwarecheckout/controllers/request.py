@@ -159,14 +159,14 @@ def request_approve(id):
         success=True,
     )
 
-@app.route('/request/<int:id>/fulfill', methods=['POST'])
+@app.route('/request/<int:id>/fulfill/<int:userid>', methods=['POST'])
 @requires_admin()
-def request_fulfill(id):
+def request_fulfill(id, userid):
     """Fulfill request and return status"""
     r = Request.query.get(id)
 
     # collect user ID
-    if r.requires_id:
+    if r.requires_id and userid:
         r.user.have_their_id = True
 
     for request_item in r.items:

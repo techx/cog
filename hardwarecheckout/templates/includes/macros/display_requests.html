@@ -1,7 +1,7 @@
 {% macro display_requests(requests, RequestStatus, admin=False,
     show_item_name=True, show_proposal=False, time=True, actions=True) -%}
 
-{% from 'includes/macros/confirmation.html' import confirmation %}
+{% from 'includes/macros/selection.html' import selection %}
 <table class="ui stackable table">
     {% if requests %}
     <thead class="ui mobile hidden header">
@@ -103,16 +103,16 @@
                                     {% if request.user.have_their_id %} 
                                         class="ui icon request-action" 
                                         href="#" data-action="fulfill request" 
-                                        data-id="{{ request.id}}" 
+                                        data-id="{{ request.id}}" data-userid="0"
                                     {% else %} 
                                         class="ui icon" 
                                         href="#" 
                                         onclick="$('.id-confirmation[data-id=\'{{request.id}}\']').modal('show');"
                                     {% endif %} >
                                     <i class="ui checkmark icon"></i>Fulfill</a>
-                                    {{ confirmation("id-confirmation", 
-                                        "Be sure to collect a valid of form of ID from this hacker!",
-                                        None, "fulfill request", request.id, "request-action") }}
+                                    {{ selection("id-confirmation", 
+                                        "Collect a valid form of ID from this hacker?",
+                                        "Yes or No!", "fulfill request", request.id, True, "request-action") }}
                                 <a class="ui icon request-action" href="#" data-action="cancel request" data-id="{{ request.id }}">
                                     <i class="ui remove icon"></i>Cancel
                                 </a>

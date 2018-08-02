@@ -12,7 +12,7 @@ $.fn.api.settings.api = {
     'submit request'    : '/request/submit',
     'cancel request'    : '/request/{id}/cancel',
     'approve request'   : '/request/{id}/approve',
-    'fulfill request'   : '/request/{id}/fulfill',
+    'fulfill request'   : '/request/{id}/fulfill/{userid}',
     'deny request'      : '/request/{id}/deny',
     'update user'       : '/user/{id}/update'
 }
