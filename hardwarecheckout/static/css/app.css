@@ -6,6 +6,14 @@
   text-align: left;
   vertical-align: middle; }
 
+#register-wrapper {
+  max-width: 450px;
+  margin-top: 35px; }
+
+#register-form {
+  text-align: left;
+  vertical-align: middle; }
+
 .footer {
   color: #777;
   padding-bottom: 1em;

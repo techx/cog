@@ -16,10 +16,18 @@
                 <input type="password" name="password" placeholder="**********"> 
             </div>
             <input class="ui fluid primary submit button" type="submit" value="Login">
+            <a class="ui fluid secondary submit button" href="{{ url_for('register_page') }}">Register</a>
         </form>
         {% if error %}
             <div class="ui error message">Login Errors:
                 {% for item in error %}
+                <div>{{item}}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if success %}
+            <div class="ui success message">
+                {% for item in success %}
                 <div>{{item}}</div>
                 {% endfor %}
             </div>

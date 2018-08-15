@@ -11,6 +11,7 @@
             <a class="ui item" href="{{ url_for('get_user') }}"><i class="user icon"></i>{{ user.email }}</a>
             <a class="ui item" href="{{ url_for('logout') }}"><i class="sign out icon"></i>Logout</a>
         {% else %}
+            <a class="ui item" href="{{ url_for('register_page') }}"><i class="user icon"></i>Register</a>
             <a class="ui item" href="{{ url_for('login_page') }}"><i class="sign in icon"></i>Login</a>
         {% endif %}
     </div>
