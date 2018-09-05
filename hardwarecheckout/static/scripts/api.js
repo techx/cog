@@ -2,7 +2,7 @@ $.fn.api.settings.api = {
     'add item'          : '/inventory/add',
     'import items'      : '/inventory/autoadd',
     'update item'       : '/inventory/update/{id}',
-    'return item'       : '/inventory/return/{id}', 
+    'return item'       : '/inventory/return/{id}',
     'delete item'       : '/inventory/delete/{id}',
     'add subitem'       : '/inventory/subitem/add/{id}',
     'update subitem'    : '/inventory/subitem/update/{id}',
@@ -12,7 +12,7 @@ $.fn.api.settings.api = {
     'submit request'    : '/request/submit',
     'cancel request'    : '/request/{id}/cancel',
     'approve request'   : '/request/{id}/approve',
-    'fulfill request'   : '/request/{id}/fulfill/{userid}',
+    'fulfill request'   : '/request/{id}/fulfill',
     'deny request'      : '/request/{id}/deny',
     'update user'       : '/user/{id}/update'
 }

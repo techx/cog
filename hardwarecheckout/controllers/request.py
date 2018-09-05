@@ -32,7 +32,7 @@ def get_requests():
         RequestStatus = RequestStatus,
         lottery_items = InventoryEntry.query.filter_by(item_type=ItemType.LOTTERY).all(),
         user=user)
-        
+
 @app.route('/request/submit', methods=['POST'])
 @requires_auth()
 def request_submit():
@@ -40,14 +40,14 @@ def request_submit():
     if not (user.location and user.phone):
         return jsonify(
             success=False,
-            message="""Please fill out your <a href='/user'>user info</a> before 
+            message="""Please fill out your <a href='/user'>user info</a> before
                 requesting items!"""
         )
     proposal = request.form.get('proposal', '')
     requested_quantity = int(request.form.get('quantity', 1))
 
     if app.config['LOTTERY_CHAR_LIMIT']:
-        if len(proposal) > app.config['LOTTERY_CHAR_LIMIT']: 
+        if len(proposal) > app.config['LOTTERY_CHAR_LIMIT']:
             proposal = proposal[:app.config['LOTTERY_CHAR_LIMIT']]
 
     entry = InventoryEntry.query.get(request.form['item_id'])
@@ -107,20 +107,20 @@ def request_submit():
     db.session.commit()
     return jsonify(
         success=True,
-    ) 
+    )
 
 @app.route('/request/<int:id>/cancel', methods=['POST'])
 @requires_auth()
 def request_cancel(id):
     """Cancel request, returns status
     Non-admins can only cancel own request, returns 403 if attempted"""
-    r = Request.query.get(id) 
+    r = Request.query.get(id)
     if user.is_admin or r.user_id == user.id:
         r.status = RequestStatus.CANCELLED
         db.session.commit()
         return jsonify(
             success=True,
-        ) 
+        )
     else:
         return jsonify(
             success=False,
@@ -136,7 +136,7 @@ def request_update(id, status):
     r = Request.query.get(id)
     r.status = status
     db.session.commit()
-    return True 
+    return True
 
 @app.route('/request/<int:id>/approve', methods=['POST'])
 @requires_admin()
@@ -159,14 +159,15 @@ def request_approve(id):
         success=True,
     )
 
-@app.route('/request/<int:id>/fulfill/<int:userid>', methods=['POST'])
+@app.route('/request/<int:id>/fulfill', methods=['POST'])
 @requires_admin()
-def request_fulfill(id, userid):
+def request_fulfill(id):
     """Fulfill request and return status"""
     r = Request.query.get(id)
 
     # collect user ID
-    if r.requires_id and userid:
+    userid = request.form['userid']
+    if r.requires_id and int(userid):
         r.user.have_their_id = True
 
     for request_item in r.items:
@@ -182,8 +183,8 @@ def request_fulfill(id, userid):
                     message='Out of stock!'
                 )
             # give user item
-            r.user.items.append(item) 
-    
+            r.user.items.append(item)
+
     # update request status
     request_update(id, RequestStatus.FULFILLED)
 
@@ -211,15 +212,15 @@ def authenticate_admin_conection():
     if 'jwt' in request.cookies:
         quill_id = verify_token(request.cookies['jwt'])
         if not quill_id:
-            return False 
+            return False
         user = User.query.filter_by(quill_id=quill_id).first()
 
         if user == None or not user.is_admin:
-            return False 
+            return False
 
         return True
-    else: 
-        return False 
+    else:
+        return False
 
 @socketio.on('connect', namespace='/user')
 def authenticate_user_conection():
@@ -229,18 +230,18 @@ def authenticate_user_conection():
     if 'jwt' in request.cookies:
         quill_id = verify_token(request.cookies['jwt'])
         if not quill_id:
-            return False 
+            return False
         user = User.query.filter_by(quill_id=quill_id).first()
 
         if user == None:
-            return False 
+            return False
 
         socket = Socket(request.sid, user)
         db.session.add(socket)
         db.session.commit()
         return True
     else:
-        return False 
+        return False
 
 @socketio.on('disconnect', namespace='/user')
 def user_disconnect():
@@ -259,7 +260,7 @@ def on_request_update(mapper, connection, target):
 
 def request_change_handler(target):
     """Handler that sends updated HTML for rendering requests"""
-    user = target.user  
+    user = target.user
     sockets = Socket.query.filter_by(user=user).all()
 
     requests = Request.query.filter(Request.user == user, Request.status.in_(
@@ -277,14 +278,14 @@ def request_change_handler(target):
         }, namespace='/user', room=socket.sid)
 
     # TODO: add check if at least one admin is connected
-    approved_requests = render_template('includes/macros/display_requests.html', 
+    approved_requests = render_template('includes/macros/display_requests.html',
             # display requests that are submitted and non lottery OR already approved
             requests = Request.query.filter_by(status = RequestStatus.APPROVED).all(),
             RequestStatus = RequestStatus,
             admin = True,
             time = True)
 
-    submitted_requests = render_template('includes/macros/display_requests.html', 
+    submitted_requests = render_template('includes/macros/display_requests.html',
             # display requests that are submitted and non lottery OR already approved
             requests = Request.query.filter_by(requires_lottery = False,
                 status = RequestStatus.SUBMITTED).all(),
@@ -295,10 +296,10 @@ def request_change_handler(target):
     lottery_items = InventoryEntry.query.filter_by(item_type=ItemType.LOTTERY).all()
     lottery_quantities = []
     for item in lottery_items:
-        lottery_quantities.append( 
+        lottery_quantities.append(
             {
                 "id": item.id,
-                "available": item.quantity, 
+                "available": item.quantity,
                 "submitted": item.submitted_request_quantity
             }
         )
@@ -306,7 +307,7 @@ def request_change_handler(target):
     socketio.emit('update', {
         'approved_requests': approved_requests,
         'submitted_requests': submitted_requests,
-        'lottery_quantities': lottery_quantities 
+        'lottery_quantities': lottery_quantities
     }, namespace='/admin')
 
 # listeners for change to Request database
