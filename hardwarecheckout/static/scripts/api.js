@@ -2,7 +2,7 @@ $.fn.api.settings.api = {
     'add item'          : '/inventory/add',
     'import items'      : '/inventory/autoadd',
     'update item'       : '/inventory/update/{id}',
-    'return item'       : '/inventory/return/{id}', 
+    'return item'       : '/inventory/return/{id}',
     'delete item'       : '/inventory/delete/{id}',
     'add subitem'       : '/inventory/subitem/add/{id}',
     'update subitem'    : '/inventory/subitem/update/{id}',
@@ -14,7 +14,9 @@ $.fn.api.settings.api = {
     'approve request'   : '/request/{id}/approve',
     'fulfill request'   : '/request/{id}/fulfill',
     'deny request'      : '/request/{id}/deny',
-    'update user'       : '/user/{id}/update'
+    'update user'       : '/user/{id}/update',
+    'approve all'       : '/request/approve',
+    'deny all'          : '/request/deny'
 }
 
 $.fn.api.settings.successTest = function(response) {

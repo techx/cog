@@ -1,4 +1,4 @@
-var socket = io.connect(location.protocol + '//' + document.domain + ':' 
+var socket = io.connect(location.protocol + '//' + document.domain + ':'
     + location.port + '/admin');
 socket.on('connect', function() {
     console.log('Socket connected!')
@@ -29,7 +29,7 @@ socket.on('update', function(data) {
     }
 });
 
-function init_request_actions() {   
+function init_request_actions() {
     $('.request-action').api({
         method: 'POST',
         onSuccess: function(response) {
@@ -43,6 +43,34 @@ function init_request_actions() {
 
 $(document).ready(function() {
     init_request_actions();
+    $('.approve-all.button').api({
+        method: 'POST',
+        onSuccess: function(response) {
+        },
+        onFailure: function(err) {
+            console.log(err);
+            alert(err.message)
+        },
+        onError: function(err) {
+            console.log("ERROR!");
+            console.log(err);
+        }
+    });
+
+    $('.deny-all.button').api({
+        method: 'POST',
+        onSuccess: function(response) {
+        },
+        onFailure: function(err) {
+            console.log("ERROR!");
+            console.log(err);
+        },
+        onError: function(err) {
+            console.log("ERROR!");
+            console.log(err);
+        }
+    });
+
     $('.run-lottery.button').api({
         method: 'POST',
         onSuccess: function(response) {
