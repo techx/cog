@@ -1,7 +1,6 @@
 {% macro display_requests(requests, RequestStatus, admin=False,
     show_item_name=True, show_proposal=False, time=True, actions=True) -%}
 
-{% from 'includes/macros/selection.html' import selection %}
 <table class="ui stackable table">
     {% if requests %}
     <thead class="ui mobile hidden header">
@@ -25,17 +24,17 @@
     {% endif %}
     <tbody>
         {% for request in requests | sort(attribute="timestamp") | reverse %}
-            <tr> 
+            <tr>
                 {% if show_item_name %}
                 <td>
                     {% for item in request.items %}
-                        <span> 
+                        <span>
                             {% if admin %}
-                            <a href="{{ url_for('inventory_display', id=item.entry.id) }}"> 
-                                {{ item.entry.name }} 
-                            </a> 
+                            <a href="{{ url_for('inventory_display', id=item.entry.id) }}">
+                                {{ item.entry.name }}
+                            </a>
                             {% else %}
-                                {{ item.entry.name }} 
+                                {{ item.entry.name }}
                             {% endif %}
                         </span>
                     {% endfor %}
@@ -57,7 +56,7 @@
                 {% if admin %}
                 <td>
                     <a href="{{ url_for('user_items', id=request.user.id) }}">
-                        <span class="ui label"> <i class="ui user icon"></i> {{ request.user.email }} </span> 
+                        <span class="ui label"> <i class="ui user icon"></i> {{ request.user.email }} </span>
                     </a>
                     {% if request.requires_id %}
                         {% if request.user.have_their_id %}
@@ -71,19 +70,19 @@
                 </td>
                 {% endif %}
                 <td>
-                    {% if request.status == RequestStatus.SUBMITTED %} 
+                    {% if request.status == RequestStatus.SUBMITTED %}
                         <span class="ui label">Submitted</span>
                     {% endif %}
-                    {% if request.status == RequestStatus.APPROVED %} 
+                    {% if request.status == RequestStatus.APPROVED %}
                         <span class="ui label green">Approved</span>
                     {% endif %}
-                    {% if request.status == RequestStatus.FULFILLED %} 
+                    {% if request.status == RequestStatus.FULFILLED %}
                         <span class="ui label green">Fulfilled</span>
                     {% endif %}
-                    {% if request.status == RequestStatus.DENIED %} 
+                    {% if request.status == RequestStatus.DENIED %}
                         <span class="ui label red">Denied</span>
                     {% endif %}
-                    {% if request.status == RequestStatus.CANCELLED %} 
+                    {% if request.status == RequestStatus.CANCELLED %}
                         <span class="ui label red">Cancelled</span>
                     {% endif %}
                 </td>
@@ -99,20 +98,32 @@
                                 </a>
                             {% endif %}
                             {% if request.status == RequestStatus.APPROVED %}
-                                <a                                 
-                                    {% if request.user.have_their_id %} 
-                                        class="ui icon request-action" 
-                                        href="#" data-action="fulfill request" 
-                                        data-id="{{ request.id}}" data-userid="0"
-                                    {% else %} 
-                                        class="ui icon" 
-                                        href="#" 
+                                <a
+                                    {% if request.user.have_their_id %}
+                                        class="ui icon id-fulfill" href="#"
+                                        data-id="{{ request.id}}"
+                                        data-userid="1"
+                                    {% else %}
+                                        class="ui icon"
+                                        href="#"
                                         onclick="$('.id-confirmation[data-id=\'{{request.id}}\']').modal('show');"
                                     {% endif %} >
                                     <i class="ui checkmark icon"></i>Fulfill</a>
-                                    {{ selection("id-confirmation", 
-                                        "Collect a valid form of ID from this hacker?",
-                                        "Yes or No!", "fulfill request", request.id, True, "request-action") }}
+                                    <div data-id="{{ request.id }}" class="ui id-confirmation modal">
+                                        <div class="header">Collect a valid form of ID from this hacker!</div>
+                                        <div class="actions">
+                                            <a class="ui red approve button id-fulfill" href="#"
+                                                data-id="{{ request.id }}"
+                                                data-userid="0">
+                                                <i class="ui close icon"></i>SKIP
+                                            </a>
+                                            <a class="ui primary approve button id-fulfill" href="#"
+                                                data-id="{{ request.id }}"
+                                                data-userid="1">
+                                                <i class="ui check icon"></i>OK
+                                            </a>
+                                        </div>
+                                    </div>
                                 <a class="ui icon request-action" href="#" data-action="cancel request" data-id="{{ request.id }}">
                                     <i class="ui remove icon"></i>Cancel
                                 </a>
@@ -132,7 +143,7 @@
                 <div> No requests! </div>
             {% else %}
                 <div> You haven't submitted any requests! </div>
-            {% endif %} 
+            {% endif %}
         {% endfor %}
   </tbody>
 </table>

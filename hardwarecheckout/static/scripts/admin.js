@@ -1,4 +1,4 @@
-var socket = io.connect(location.protocol + '//' + document.domain + ':' 
+var socket = io.connect(location.protocol + '//' + document.domain + ':'
     + location.port + '/admin');
 socket.on('connect', function() {
     console.log('Socket connected!')
@@ -29,7 +29,7 @@ socket.on('update', function(data) {
     }
 });
 
-function init_request_actions() {   
+function init_request_actions() {
     $('.request-action').api({
         method: 'POST',
         onSuccess: function(response) {
@@ -37,6 +37,17 @@ function init_request_actions() {
         onFailure: function(err) {
             console.log(err);
             alert(err.message)
+        }
+    });
+    $('.id-fulfill').api({
+        action: 'fulfill request',
+        method: 'POST',
+        serializeForm: true,
+        beforeSend: function(settings) {
+            settings.data.userid = $(this).data('userid');
+            return settings;
+        },
+        onSuccess: function(response) {
         }
     });
 }
