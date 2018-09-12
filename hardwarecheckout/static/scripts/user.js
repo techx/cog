@@ -59,4 +59,19 @@ $(document).ready(function() {
             alert(err.message)
         }
     });
+
+    $('.id-fulfill').api({
+        action: 'fulfill request',
+        method: 'POST',
+        serializeForm: true,
+        beforeSend: function(settings) {
+            settings.data.collected_id = $(this).data('collected-id');
+            return settings;
+        },
+        onSuccess: function(response) {
+            setTimeout(function() {
+                window.location.reload();
+            }, 250);
+        }
+    });
 });

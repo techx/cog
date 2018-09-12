@@ -166,8 +166,17 @@ def request_fulfill(id):
     r = Request.query.get(id)
 
     # collect user ID
-    userid = request.form['userid']
-    if r.requires_id and int(userid):
+    if request.form['collected_id'] == 'true':
+        collected_id = True
+    elif request.form['collected_id'] == 'false':
+        collected_id = False
+    else:
+        return jsonify(
+            success=False,
+            message="collected_id must be a boolean"
+        )
+
+    if r.requires_id and collected_id:
         r.user.have_their_id = True
 
     for request_item in r.items:

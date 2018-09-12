@@ -102,7 +102,7 @@
                                     {% if request.user.have_their_id %}
                                         class="ui icon id-fulfill" href="#"
                                         data-id="{{ request.id}}"
-                                        data-userid="1"
+                                        data-collected-id="true"
                                     {% else %}
                                         class="ui icon"
                                         href="#"
@@ -112,16 +112,16 @@
                                     <div data-id="{{ request.id }}" class="ui id-confirmation modal">
                                         <div class="header">Collect a valid form of ID from this hacker!</div>
                                         <div class="actions">
-                                            <a class="ui red approve button id-fulfill" href="#"
+                                            <button class="ui primary approve button id-fulfill" href="#"
                                                 data-id="{{ request.id }}"
-                                                data-userid="0">
-                                                <i class="ui close icon"></i>SKIP
-                                            </a>
-                                            <a class="ui primary approve button id-fulfill" href="#"
-                                                data-id="{{ request.id }}"
-                                                data-userid="1">
+                                                data-collected-id="true" autofocus>
                                                 <i class="ui check icon"></i>OK
-                                            </a>
+                                            </button>
+                                            <button class="ui red approve button id-fulfill" href="#"
+                                                data-id="{{ request.id }}"
+                                                data-collected-id="false">
+                                                <i class="ui close icon"></i>SKIP
+                                            </button>
                                         </div>
                                     </div>
                                 <a class="ui icon request-action" href="#" data-action="cancel request" data-id="{{ request.id }}">

@@ -44,7 +44,7 @@ function init_request_actions() {
         method: 'POST',
         serializeForm: true,
         beforeSend: function(settings) {
-            settings.data.userid = $(this).data('userid');
+            settings.data.collected_id = $(this).data('collected-id');
             return settings;
         },
         onSuccess: function(response) {
