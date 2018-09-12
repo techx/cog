@@ -404,10 +404,16 @@ def inventory_return(id):
     """
     item = Item.query.get(id)
     user = item.user
+    if not user:
+        return jsonify(
+            success=False,
+            message='No user for item.'
+        )
+
     item.user = None
     return_id = False
 
-    if not user.requires_id():
+    if not user.requires_id() and user.have_their_id:
         user.have_their_id = False
         return_id = True
         
