@@ -1,5 +1,11 @@
 {% macro display_item(item, counts, admin=False, requestable=False) -%}
+{% if counts %}
+<!-- When displaying many of these item macros, can pass in a dictionary of
+     quantity for every item for performance reasons -->
 {% set count = counts.get(item.id, 0) %}
+{% else %}
+{% set count = item.quantity %}
+{% endif %}
 <div class="row" >
     <div class="ten wide column">
         <div class="ui items">

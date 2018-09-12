@@ -8,6 +8,7 @@ i.*.swp
 private
 delete_db.py
 env/
+venv/
 test_db
 .env
 node_modules/
