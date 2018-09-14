@@ -2,6 +2,7 @@ import uuid
 from jose import jws
 from jose.exceptions import JWSError
 import os
+import time
 from hardwarecheckout.config import *
 from hardwarecheckout.constants import *
 from hardwarecheckout.models.user import *
@@ -9,9 +10,17 @@ from flask import (redirect, request, jsonify, url_for)
 from functools import wraps
 from datetime import datetime
 from babel import dates
+import yagmail
 
 def gen_uuid():
     return str(uuid.uuid4()).replace('-', '')
+
+def gen_token(id, duration=604800):
+    try:
+        expiry = int(time.time()) + duration
+        return jws.sign(id, SECRET)
+    except JWSError:
+        return None
 
 def verify_token(token):
     try:
@@ -27,6 +36,17 @@ def safe_redirect(endpoint, request):
             redirect=url_for(endpoint)
         ), 401
     return redirect(url_for(endpoint))
+
+def send_verification_email(to, token):
+    yag = yagmail.SMTP(user=SMTP_USER, password=SMTP_PASSWORD, host=SMTP_HOST)
+    subject = "[%s] Verify your email" % (HACKATHON_NAME)
+    content = """
+    Thanks for registering for Hardware Checkout at %s!
+
+    Click <a href="%s">here</a> to verify your email.
+
+    The %s Team""" % (HACKATHON_NAME, DOMAIN + "/verify?token=" + token, HACKATHON_NAME)
+    yag.send(to, subject, content)
 
 def requires_auth():
     def decorator(f):

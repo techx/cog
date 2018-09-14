@@ -1,0 +1,32 @@
+{% extends "includes/wrapper.html" %}
+{% block title %} Register {% endblock %}
+
+{% block content %}
+<div class="ui middle aligned center aligned grid"> 
+    <div id="register-wrapper" class="ui segment column">
+        <h2 class="ui header"> {{ config["HACKATHON_NAME"] }} Hardware </h2>
+        <form id="register-form" class="ui form" action='/register' method='POST'>
+            <div class="field">
+                <label>Email</label> 
+                <input type="text" name="email" placeholder="alyssap@hacker.org" autofocus>
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="**********"> 
+            </div>
+            <div class="field">
+                <label>Confirm Password</label>
+                <input type="password" name="confirm" placeholder="**********"> 
+            </div>
+            <input class="ui fluid primary submit button" type="submit" value="Register">
+        </form>
+        {% if error %}
+            <div class="ui error message">Registration Errors:
+                {% for item in error %}
+                <div>{{item}}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
