@@ -10,7 +10,19 @@
     {{ display_requests(approved_requests, RequestStatus, user.is_admin) }}
 </div>
 
-<h2> Pending Requests </h2>
+<table class="ui very basic table">
+    <thead>
+        <tr>
+            <td>
+                <h2> Pending Requests </h2>
+            </td>
+            <td class="ui right aligned">
+                <div class="ui primary approve-all button" data-action="approve all">Approve All</div>
+                <div class="ui primary deny-all button" data-action="deny all">Deny All</div>
+            </td>
+        </tr>
+    </thead>
+</table>
 <div id="submitted_requests">
     {{ display_requests(submitted_requests, RequestStatus, user.is_admin) }}
 </div>
@@ -32,19 +44,19 @@
             <td>
                 <div data-item-id="{{ item.id }}">
                     <h3> {{ item.name }} </h3>
-                    Quantity: 
+                    Quantity:
                     <span class="item-quantity">
                         {{ item.quantity }}
-                    </span>, 
-                    Proposals: 
+                    </span>,
+                    Proposals:
                     <span class="submitted-quantity">
                         {{ item.submitted_request_quantity }}
                     </span>
-                    <a href="{{ url_for('inventory_display', id=item.id) }}"> (view) </a> 
+                    <a href="{{ url_for('inventory_display', id=item.id) }}"> (view) </a>
                 </div>
             </td>
             <td class="ui right aligned">
-                <div class="ui primary run-lottery button" 
+                <div class="ui primary run-lottery button"
                         data-action="run lottery" data-id="{{ item.id }}">Run Lottery</div>
             </td>
         </tr>

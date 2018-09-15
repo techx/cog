@@ -14,7 +14,9 @@ $.fn.api.settings.api = {
     'approve request'   : '/request/{id}/approve',
     'fulfill request'   : '/request/{id}/fulfill',
     'deny request'      : '/request/{id}/deny',
-    'update user'       : '/user/{id}/update'
+    'update user'       : '/user/{id}/update',
+    'approve all'       : '/request/approve',
+    'deny all'          : '/request/deny'
 }
 
 $.fn.api.settings.successTest = function(response) {

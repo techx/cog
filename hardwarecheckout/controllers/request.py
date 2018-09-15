@@ -1,7 +1,6 @@
 from hardwarecheckout import app
 from hardwarecheckout import socketio
 from hardwarecheckout.models import db
-
 from hardwarecheckout.models.request import Request, RequestStatus
 from hardwarecheckout.models.inventory_entry import InventoryEntry
 from hardwarecheckout.models.inventory_entry import ItemType
@@ -9,7 +8,6 @@ from hardwarecheckout.models.user import User
 from hardwarecheckout.models.item import Item
 from hardwarecheckout.models.request_item import RequestItem
 from hardwarecheckout.models.socket import Socket
-
 from hardwarecheckout.utils import requires_auth, requires_admin, verify_token
 from sqlalchemy import event
 
@@ -147,14 +145,45 @@ def request_approve(id):
         entry = request_item.entry
         quantity = request_item.quantity
 
-        # get items of proper type
-        for _ in xrange(quantity):
-            if entry.quantity < quantity:
-                return jsonify(
-                    success=False,
-                    message='Out of stock!'
-                )
+        if entry.quantity < quantity:
+            return jsonify(
+                success=False,
+                message='Out of stock!'
+            )
     request_update(id, RequestStatus.APPROVED)
+    return jsonify(
+        success=True,
+    )
+
+@app.route('/request/approve', methods=['POST'])
+@requires_admin()
+def approve_requests():
+    """Approve all requests"""
+    submitted_requests = Request.query.filter_by(requires_lottery = False,
+                                                 status = RequestStatus.SUBMITTED).all()
+
+    entries_dict = {}
+    for request in submitted_requests:
+        r = Request.query.get(request.id)
+        for request_item in r.items:
+            entry = request_item.entry
+            quantity = request_item.quantity
+
+            if entry in entries_dict:
+                entries_dict[entry] += quantity
+            else: entries_dict[entry] = quantity
+
+    for entry in entries_dict.keys():
+        requested_quantity = entries_dict[entry]
+        if entry.quantity < requested_quantity:
+            return jsonify(
+                success=False,
+                message='Some items are out of stock!'
+            )
+
+    for request in submitted_requests:
+        request_update(request.id, RequestStatus.APPROVED)
+
     return jsonify(
         success=True,
     )
@@ -209,6 +238,18 @@ def request_fulfill(id):
 def request_deny(id):
     """Deny request and return status"""
     request_update(id, RequestStatus.DENIED)
+    return jsonify(
+        success=True,
+    )
+
+@app.route('/request/deny', methods=['POST'])
+@requires_admin()
+def deny_requests():
+    """Deny all requests"""
+    submitted_requests = Request.query.filter_by(requires_lottery = False,
+                                                 status = RequestStatus.SUBMITTED).all()
+    for request in submitted_requests:
+        request_update(request.id, RequestStatus.DENIED)
     return jsonify(
         success=True,
     )
