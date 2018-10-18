@@ -1,0 +1,10 @@
+
+wants:
+  postgres: true
+env:
+
+secrets:
+  - SECRET
+  - SMTP_HOST
+  - SMTP_USER
+  - SMTP_PASSWORD

@@ -7,13 +7,13 @@ import os
 # Postgres SQL Connection String.
 # Note: This is the default env variable name
 # used for Heroku postgres deploys.
-DB_URI = os.environ['DATABASE_URL'] 
+DB_URI = os.environ['POSTGRES_URL'] 
 
 # URL of Quill instance (for auth integration)
 QUILL_URL = os.environ['QUILL'] 
 
 # Required for email verification
-DOMAIN = os.environ['EMAIL_DOMAIN']
+DOMAIN = os.environ['ROOT_URL']
 SMTP_HOST = os.environ['SMTP_HOST']
 SMTP_USER = os.environ['SMTP_USER']
 SMTP_PASSWORD = os.environ['SMTP_PASSWORD']
@@ -31,18 +31,18 @@ SECRET = os.environ['SECRET']
 
 # Enable/disable Flask debug mode. Should be set to 
 # False on production deploys of Cog. 
-DEBUG = True 
+DEBUG = False 
 
 # Ensure that all attempts to visit an insecure version 
 # of the page redirect to  https, and makes sure all 
 # Cog-derived redirects use https. Recommended to set
 # this to True if using an SSL-protected deploy. 
 # Only works when DEBUG=False.
-FORCE_SSL = False 
+FORCE_SSL = True 
 
 ## Metadata ## 
 
-HACKATHON_NAME = "HackMIT"
+HACKATHON_NAME = "HackGT"
 
 ## Event logistical settings ##
 
