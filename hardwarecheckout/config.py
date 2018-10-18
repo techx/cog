@@ -12,6 +12,12 @@ DB_URI = os.environ['DATABASE_URL']
 # URL of Quill instance (for auth integration)
 QUILL_URL = os.environ['QUILL'] 
 
+# Required for email verification
+DOMAIN = os.environ['EMAIL_DOMAIN']
+SMTP_HOST = os.environ['SMTP_HOST']
+SMTP_USER = os.environ['SMTP_USER']
+SMTP_PASSWORD = os.environ['SMTP_PASSWORD']
+
 # Random Secret for JWTs - must match Quill secret
 SECRET = os.environ['SECRET']
 
