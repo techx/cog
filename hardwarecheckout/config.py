@@ -32,7 +32,7 @@ SENDGRID_API_KEY = os.environ['SENDGRID_API_KEY']
 
 # Enable/disable Flask debug mode. Should be set to 
 # False on production deploys of Cog. 
-DEBUG = False
+DEBUG = True
 
 # Ensure that all attempts to visit an insecure version 
 # of the page redirect to  https, and makes sure all 
