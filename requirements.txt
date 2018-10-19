@@ -1,3 +1,4 @@
+asn1crypto==0.24.0
 astroid==1.5.3
 Babel==2.4.0
 backports.functools-lru-cache==1.4
@@ -9,7 +10,7 @@ cffi==1.10.0
 chardet==3.0.4
 click==6.7
 configparser==3.5.0
-cryptography==1.7.2
+cryptography==2.3.1
 decorator==4.1.2
 dnspython==1.15.0
 ecdsa==0.13
