@@ -10,7 +10,8 @@ from flask import (redirect, request, jsonify, url_for)
 from functools import wraps
 from datetime import datetime
 from babel import dates
-import yagmail
+import sendgrid
+from sendgrid.helpers.mail import Email, Content, Substitution, Mail
 
 def gen_uuid():
     return str(uuid.uuid4()).replace('-', '')
@@ -38,15 +39,20 @@ def safe_redirect(endpoint, request):
     return redirect(url_for(endpoint))
 
 def send_verification_email(to, token):
-    yag = yagmail.SMTP(user=SMTP_USER, password=SMTP_PASSWORD, host=SMTP_HOST)
+    sg = sendgrid.SendGridAPIClient(apikey=SENDGRID_API_KEY)
+    from_email = Email("hello@hackgt.com")
+    to_email = Email(to)
     subject = "[%s] Verify your email" % (HACKATHON_NAME)
-    content = """
-    Thanks for registering for Hardware Checkout at %s!
+    content = Content("text/html", """
+    Thanks for registering for Hardware Checkout at %s! <br>
 
-    Click <a href="%s">here</a> to verify your email.
+    Click <a href='%s'>here</a> to verify your email.<br><br>
 
-    The %s Team""" % (HACKATHON_NAME, DOMAIN + "/verify?token=" + token, HACKATHON_NAME)
-    yag.send(to, subject, content)
+    With <3,<br><br>
+
+    The %s Team""" % (HACKATHON_NAME, DOMAIN + "/verify?token=" + token, HACKATHON_NAME))
+    mail = Mail(from_email, subject, to_email, content)
+    response = sg.client.mail.send.post(request_body=mail.get())
 
 def requires_auth():
     def decorator(f):

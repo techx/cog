@@ -20,6 +20,7 @@ SMTP_PASSWORD = os.environ['SMTP_PASSWORD']
 
 # Random Secret for JWTs - must match Quill secret
 SECRET = os.environ['SECRET']
+SENDGRID_API_KEY = os.environ['SENDGRID_API_KEY']
 
 
 ### The following variables may all be set using environment 
@@ -31,14 +32,14 @@ SECRET = os.environ['SECRET']
 
 # Enable/disable Flask debug mode. Should be set to 
 # False on production deploys of Cog. 
-DEBUG = False 
+DEBUG = True
 
 # Ensure that all attempts to visit an insecure version 
 # of the page redirect to  https, and makes sure all 
 # Cog-derived redirects use https. Recommended to set
 # this to True if using an SSL-protected deploy. 
 # Only works when DEBUG=False.
-FORCE_SSL = True 
+FORCE_SSL = False 
 
 ## Metadata ## 
 
