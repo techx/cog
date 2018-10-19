@@ -9,3 +9,4 @@ secrets:
   - SMTP_USER
   - SMTP_PASSWORD
   - SENDGRID_API_KEY
+  - QUILL
