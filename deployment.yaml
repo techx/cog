@@ -1,8 +1,6 @@
 target_port: 5000
 wants:
   postgres: true
-env:
-
 secrets:
   - SECRET
   - SMTP_HOST
