@@ -74,7 +74,7 @@
                         <span class="ui label">Submitted</span>
                     {% endif %}
                     {% if request.status == RequestStatus.APPROVED %}
-                        <span class="ui label green">Approved</span>
+                        <span class="ui label green">Wait for Slack DM/Email</span>
                     {% endif %}
                     {% if request.status == RequestStatus.FULFILLED %}
                         <span class="ui label green">Fulfilled</span>
