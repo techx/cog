@@ -1,9 +1,13 @@
+**THIS IS A FORKED, IN-DEVELOPMENT VERSION OF COG**
+
+If you're looking for a working copy of the original cog, please visit https://github.com/techx/cog.
+
+---
+
 # Cog
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/techx/cog)
-
 Cog is a hardware checkout system for hackathons, originally written for use
-at HackMIT and MakeMIT.
+at HackMIT and MakeMIT, now forked by Hack the North.
 
 ![Cog](/media/cog.png?raw=true)
 
@@ -31,8 +35,7 @@ ready to be picked up.
 
 ## Deployment & Configuration
 
-Cog is written in Python 3 (at least our fork partially is), and all dependencies can easily
-be installed using Pip via `requirements.txt`. Cog uses PostgreSQL as a
+Cog is written in Python 3 (at least our fork partially is) and uses PostgreSQL as a
 database. Hack the North's fork of Cog is configured with `docker-compose` for local development and deploys to Kubernetes through Skaffold.
 
 A myriad of configuration options are available to be tweaked in
@@ -70,6 +73,8 @@ CSS when the Sass is changed, install [Sass](https://sass-lang.com/) and run
 [users list](https://github.com/techx/cog/wiki/Cog-Users)!*
 
 ## Development
+**Here be dragons**
+
 Interested in hacking on Cog? Check out the [development guide](DEVELOPMENT.md) 
 for some steps to get you started.
 
@@ -79,6 +84,9 @@ contributions - have a look at our [contributing guide](CONTRIBUTING.md) for
 information on how you can get involved.
 
 ## Acknowledgements
+
+**Pre-fork acknowledgements**  
+
 Thanks to the following folks for their contributions to Cog pre-open
 sourcing: 
 - [Ethan Weber](https://github.com/ethanweber) and [Albert
