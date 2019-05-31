@@ -3,11 +3,8 @@
     "description": "A hackathon hardware check-out system by HackMIT",
     "repository": "https://github.com/techx/cog",
     "env": {
-        "QUILL": {
-            "description": "URL of Quill instance (for auth integration)"
-        }, 
         "SECRET": {
-            "description": "Random Secret for JWTs - must match Quill secret"
+            "description": "Random Secret for JWTs"
         },
         "DEBUG": {
             "description": "Toggle Flask debug mode. Should always be False in production", 

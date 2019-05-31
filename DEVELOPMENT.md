@@ -13,15 +13,14 @@ to manage Python dependencies
   - `DATABASE_URL` points to the URL of a development database,
 which has to be set up using Postgres on your system. A sample `DATABASE_URL`
 could look like `postgres://username:password@localhost/cog`. 
-  - `QUILL` is the URL to your Quill instance for auth. 
-  - `SECRET` needs to be the same JWT secret used in your Quill instance. 
+  - `SECRET` some random JWT secret
 - Run `python initialize.py` 
   - This initializes the database - run it if you make any changes to the models and
   are fine with overwriting data.
 
 ## Running 
 - Run `make run` 
-- The site will be visible at `localhost:8000`
+- The site will be visible at `localhost:80`
 
 ## Tests 
 - Run `make test` to run all tests

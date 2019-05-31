@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from flask import template_rendered
 
-def quill_login(app, username, password):
+def hackerapi_login(app, username, password):
    return app.post('/login', data=dict(
        email=username,
        password=password

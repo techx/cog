@@ -1,0 +1,24 @@
+version: "3"
+services:
+  dev_db:
+    image: postgres
+    ports:
+      - 5432
+    environment:
+      - PG_PASSWORD=password
+  cog:
+    container_name: cog
+    image: cog:latest
+    build:
+      context: .
+    environment:
+      - ENV=development
+      - PORT=80
+      - SECRET=not_a_secret
+      - DATABASE_URI=postgres://postgres:password@dev_db/postgres
+    ports:
+      - 127.0.0.1:80:80
+    depends_on:
+      - dev_db
+    volumes:
+      - .:/cog
