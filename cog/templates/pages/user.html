@@ -1,0 +1,59 @@
+{% extends "includes/nav.html" %}
+
+{% block title %} {{ target.email }} {% endblock %}
+{% block panel %}
+
+{% from 'includes/macros/display_item.html' import display_item %}
+{% from 'includes/macros/display_requests.html' import display_requests %}
+{% from 'includes/macros/items.html' import items_list %}
+
+{% if (not isme) and (not user.is_admin) %}
+    <div class="ui error message">Forbidden.</div>
+{% else %}
+
+{% if not isme %}
+    {% if target.have_their_id %}
+        <span class="ui basic label green"><i class="ui user icon"></i> ID Collected </span>
+    {% else %}
+        <span class="ui basic label red"><i class="ui user icon"></i> No ID Collected </span>
+    {% endif %}
+{% endif %}
+
+<h3> Info </h3>
+<form method="post" class="ui form">
+    <div class="four fields">
+        <div class="three wide field">
+            <input type="text" name="name" disabled placeholder="Name" value="{{ target.name }}">
+        </div>
+        <div class="three wide field">
+            <input type="text" name="location" placeholder="Location" value="{{ target.location }}">
+        </div>
+        <div class="five wide field">
+            <input type="text" name="phone" disabled placeholder="Phone Number" value="{{ target.phone }}">
+        </div>
+        <div class="four wide field">
+            <button class="ui primary update-user button" data-id="{{ target.id }}" type="submit">
+               Update 
+            </button>
+        </div>
+    </div>
+    <div class="ui error message"></div>
+</form>
+ 
+{% if target.items %}
+    <h3> Checked out </h3>
+    {{ items_list(target.items, admin=user.is_admin) }}
+{% else %}
+    <div>User has no items checked out!</div>
+{% endif %}
+</div>
+
+<h3> Requests </h3>
+{{ display_requests(requests, RequestStatus, user.is_admin) }}
+
+{% endif %}
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='scripts/user.js') }}"></script>
+{% endblock %}

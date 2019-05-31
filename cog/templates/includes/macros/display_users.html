@@ -1,0 +1,66 @@
+{% macro display_users(users, admin=False) -%}
+{% from 'includes/macros/confirmation.html' import confirmation %}
+{% from 'includes/macros/items.html' import items_list %}
+<div class="ui divided items">
+    {% for u in users %}
+        <div class="item">
+            <div class="content">
+                <a class="header" href="{{ url_for('user_items', id=u.id) }}">
+                    {% if u.name %}
+                        {{ u.name }}
+                    {% else %}
+                        {{ u.email }}
+                    {% endif %}
+                    <!--
+                    {% if u.is_admin %}
+                        <div class="ui tiny basic red label">
+                            sudo
+                        </div>
+                    {% endif %}
+                    -->
+                </a>
+
+                <div class="description">
+                    <a class="ui label" href="mailto:{{ u.email }}">
+                        <i class="mail icon"></i> {{ u.email }}
+                    </a>
+                    {% if u.phone %}
+                        <a class="ui label" href="tel:{{ u.phone }}">
+                            <i class="phone icon"></i> {{ u.phone }}
+                        </a>
+                    {% endif %}
+                    {% if u.location %}
+                        <div class="ui label">
+                            <i class="marker icon"></i> {{ u.location }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="description">
+                    <p>
+                        <i class="user icon"></i> ID:
+                        {% if u.have_their_id %}
+                            Collected
+                        {% else %}
+                            Not Collected
+                        {% endif %}
+                    </p>
+                    <p>
+                        {% if u.items %}
+                            <h4> Items Checked Out </h4>
+                            {{ items_list(u.items, table_id = u.id) }}
+                        {% else %}
+                            User has not checked out any items. 
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{{ confirmation("return-notice", "Be sure to return ID to user!", "They've returned their last item",
+None, None, "return-notice-btn") }}
+
+{%- endmacro %}
+
