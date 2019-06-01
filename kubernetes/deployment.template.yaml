@@ -52,6 +52,6 @@ spec:
         - name: SECRET
           value: "$ENV_SECRET"
         resources:
-          limits:
+          requests:
             cpu: 25m
             memory: "0.05G"
