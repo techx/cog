@@ -13,7 +13,6 @@ services:
       context: .
     environment:
       - ENV=development
-      - PORT=80
       - SECRET=not_a_secret
       - DATABASE_URI=postgres://postgres:password@dev_db/postgres
     ports:

@@ -1,0 +1,10 @@
+apiVersion: skaffold/v1alpha5
+kind: Config
+build:
+  artifacts:
+  - image: gcr.io/htn-techyon/cog-hackthenorth-com
+    context: ./
+deploy:
+  kubectl:
+    manifests:
+    - ./kubernetes/deployment.yaml

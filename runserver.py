@@ -1,7 +1,10 @@
 from cog import app, socketio
+from initialize import rebuild 
 import sys
 
 if __name__ == '__main__':
+    if os.environ['ENV'] == 'test':
+        rebuild()
     try:
         port = int(sys.argv[1]) 
     except (IndexError, ValueError):
