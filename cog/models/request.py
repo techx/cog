@@ -10,6 +10,7 @@ class RequestStatus(enum.Enum):
     FULFILLED = 2
     DENIED    = 3
     CANCELLED = 4
+    RETURNED = 5
 
     def __str__(self):
         return self.name

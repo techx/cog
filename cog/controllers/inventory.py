@@ -21,7 +21,7 @@ from cog.sheets_csv import get_csv, SheetsImportError
 from flask import jsonify
 from werkzeug.datastructures import MultiDict
 
-from sqlalchemy import func
+from sqlalchemy import func, and_
 
 import requests
 from bs4 import BeautifulSoup
@@ -407,6 +407,15 @@ def inventory_return(id):
             success=False,
             message='No user for item.'
         )
+    
+    request = Request.query.filter(and_(
+        Request.items.any(entry_id=item.entry_id),
+        Request.status == RequestStatus.FULFILLED,
+        Request.user_id == user.id
+    )).first()
+
+    if request == None:
+        request.status = RequestStatus.RETURNED
 
     item.user = None
     return_id = False

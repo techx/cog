@@ -48,7 +48,7 @@
                     <p>
                         {% if u.items %}
                             <h4> Items Checked Out </h4>
-                            {{ items_list(u.items, table_id = u.id) }}
+                            {{ items_list(u.items, table_id = u.id, admin = admin) }}
                         {% else %}
                             User has not checked out any items. 
                         {% endif %}
@@ -59,8 +59,7 @@
     {% endfor %}
 </div>
 
-{{ confirmation("return-notice", "Be sure to return ID to user!", "They've returned their last item",
-None, None, "return-notice-btn") }}
+{{ confirmation("return-notice", "Be sure to return ID to user!", "They've returned their last item", True, None, "return-notice-btn") }}
 
 {%- endmacro %}
 

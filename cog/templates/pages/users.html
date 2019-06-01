@@ -5,7 +5,7 @@
 {% block title %} Users {% endblock %}
 
 {% block panel %}
-    {{ display_users(users) }}
+    {{ display_users(users, admin = user.is_admin) }}
 {% endblock %}
 
 {% block script %}
