@@ -48,9 +48,9 @@ spec:
         - name: ENV
           value: test
         - name: DATABASE_URI
-          value: "$ENV_DB"
+          value: "{{ENV_DB}}"
         - name: SECRET
-          value: "$ENV_SECRET"
+          value: "{{ENV_SECRET}}"
         resources:
           limits:
             cpu: 25m
