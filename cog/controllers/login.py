@@ -21,6 +21,8 @@ def check_role(roles, role):
         for d in roles
     )
 
+COOKIE_NAME = '__hackerapi-token-client-only__'
+
 @app.route('/login')
 def login_page():
     """If not logged in render login page, otherwise redirect to inventory"""
@@ -31,7 +33,7 @@ def login_page():
         except Exception as e:
             pass 
 
-    token = request.cookies.get('__hackerapi-token-client-only__', '')
+    token = request.cookies.get(COOKIE_NAME, '')
     if token != '':
         # Attempt to grab the user details
         r = json.loads(requests.get('https://hackerapi.com/v2/users/me?token=' + token).text)
@@ -66,10 +68,13 @@ def login_page():
 
                 response = app.make_response(redirect('/inventory'))
                 response.set_cookie('jwt', token)
+                response.set_cookie(COOKIE_NAME, '')
 
                 return response
          
-        return render_template('pages/login.html')
+        response = app.make_response(render_template('pages/login.html'))
+        response.set_cookie(COOKIE_NAME, '')
+        return response
     return redirect('https://auth.hackthenorth.com/?redirect=cog.team.hackthenorth.com/login')
     
 
