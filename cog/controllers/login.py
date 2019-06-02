@@ -68,10 +68,9 @@ def login_page():
                 response.set_cookie('jwt', token)
 
                 return response
-        
-
-        print(r)
-    return redirect('https://auth.hackthenorth.com/?redirect=cog.hackthenorth.com')
+         
+        return render_template('pages/login.html')
+    return redirect('https://auth.hackthenorth.com/?redirect=cog.hackthenorth.com/login')
     
 
 @app.route('/logout')

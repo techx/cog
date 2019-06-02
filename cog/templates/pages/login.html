@@ -5,25 +5,7 @@
 <div class="ui middle aligned center aligned grid"> 
     <div id="login-wrapper" class="ui segment column">
         <h2 class="ui header"> {{ config["HACKATHON_NAME"] }} Hardware </h2>
-        <span> Please login using your credentials </span>
-        <form id="login-form" class="ui form" action='/login' method='POST'>
-            <div class="field">
-                <label>Email</label> 
-                <input type="text" name="email" placeholder="alyssap@hacker.org" autofocus>
-            </div>
-            <div class="field">
-                <label>Password</label>
-                <input type="password" name="password" placeholder="**********"> 
-            </div>
-            <input class="ui fluid primary submit button" type="submit" value="Login">
-        </form>
-        {% if error %}
-            <div class="ui error message">Login Errors:
-                {% for item in error %}
-                <div>{{item}}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
+        <span>The Hardware Dashboard is only available to registered hackers.</span>
     </div>
 </div>
 {% endblock %}
