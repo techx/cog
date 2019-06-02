@@ -1,7 +1,9 @@
 import pytz
 import os
+import random
+import string
 
-from flask import Flask
+from flask import Flask, session, request
 from flask_socketio import SocketIO
 from urllib.parse import urlsplit
 from flaskext.markdown import Markdown
@@ -13,6 +15,24 @@ from flask_sslify import SSLify
 app = Flask(__name__)
 
 import cog.config as config
+
+
+app.secret_key = config.SECRET
+
+@app.before_request
+def csrf_protect():
+    if request.method == "POST":
+        token = session.pop('_csrf_token', None)
+        if not token or token != request.form.get('_csrf_token') or token != request.headers.get('X-CSRFTOKEN'):
+            abort(403)
+
+def generate_csrf_token():
+    if '_csrf_token' not in session:
+        # generate random CSRF token
+        session['_csrf_token'] = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
+    return session['_csrf_token']
+
+app.jinja_env.globals['csrf_token'] = generate_csrf_token
 
 def get_conf_bool(variable):
     val = os.environ.get(variable, getattr(config, variable))
