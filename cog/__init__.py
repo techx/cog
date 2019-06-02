@@ -3,7 +3,7 @@ import os
 import random
 import string
 
-from flask import Flask, session, request
+from flask import Flask, session, request, abort
 from flask_socketio import SocketIO
 from urllib.parse import urlsplit
 from flaskext.markdown import Markdown
