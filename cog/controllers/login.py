@@ -70,7 +70,7 @@ def login_page():
                 return response
          
         return render_template('pages/login.html')
-    return redirect('https://auth.hackthenorth.com/?redirect=cog.hackthenorth.com/login')
+    return redirect('https://auth.hackthenorth.com/?redirect=cog.team.hackthenorth.com/login')
     
 
 @app.route('/logout')
