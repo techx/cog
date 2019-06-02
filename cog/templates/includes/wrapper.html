@@ -44,7 +44,7 @@
     <script type="text/javascript">
       var csrf_token = "{{ csrf_token() }}";
       $.fn.api.settings.beforeXHR = function(xhr) {
-        xhr.setRequestHeader('X-CSRF-TOKEN', csrf_token);
+        xhr.setRequestHeader('X-CSRFTOKEN', csrf_token);
       }
     </script>
   </body>
