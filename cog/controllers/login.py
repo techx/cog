@@ -31,7 +31,7 @@ def login_page():
         except Exception as e:
             pass 
 
-    token = request.cookies.get('token', '')
+    token = request.cookies.get('__hackerapi-token-client-only__', '')
     if token != '':
         # Attempt to grab the user details
         r = json.loads(requests.get('https://hackerapi.com/v2/users/me?token=' + token).text)
