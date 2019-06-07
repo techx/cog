@@ -57,9 +57,11 @@ def login_page():
                     user = User(hackerapi_id, email, name, phone, is_organizer)
                     db.session.add(user)
                 else: 
-                    user.name = name 
-                    user.email = email 
-                    user.phone = phone 
+                    if name != '':
+                        user.name = name 
+                    user.email = email
+                    if phone != '':
+                        user.phone = phone 
                     user.is_organizer = is_organizer
 
                 db.session.commit()
