@@ -1,25 +1,32 @@
 {% extends "includes/wrapper.html" %}
 {% block head %}
 {% endblock %}
+
+
 {% block content %}
-<div class="ui secondary pointing menu stackable">
-    <a class="item" href="{{ url_for('inventory') }}"><i class="home icon"></i>Home </a>
-    {% if user.is_admin %} <a class="ui item" href="{{ url_for('get_requests') }}">Requests</a> {% endif %}
-    {% if user.is_admin %} <a class="ui item" href="{{ url_for('get_users') }}">Users</a> {% endif %}
-    <div class="right menu">
-        {% if user %}
-            <a class="ui item" href="{{ url_for('get_user') }}"><i class="user icon"></i>{{ user.email }}</a>
-            <a class="ui item" href="{{ url_for('logout') }}"><i class="sign out icon"></i>Logout</a>
-        {% else %}
-            <a class="ui item" href="{{ url_for('login_page') }}"><i class="sign in icon"></i>Login</a>
-        {% endif %}
+<div id="navbar">
+    <div class="ui container">
+        <div class="ui secondary inverted pointing menu stackable">
+            <a class="item" href="{{ url_for('inventory') }}"><i class="home icon"></i>Home </a>
+            {% if user.is_admin %} <a class="ui item" href="{{ url_for('get_requests') }}">Requests</a> {% endif %}
+            {% if user.is_admin %} <a class="ui item" href="{{ url_for('get_users') }}">Users</a> {% endif %}
+            <div class="right menu">
+                {% if user %}
+                    <a class="ui item" href="{{ url_for('get_user') }}"><i class="user icon"></i>{{ user.email }}</a>
+                    <a class="ui item" href="{{ url_for('logout') }}"><i class="sign out icon"></i>Logout</a>
+                {% else %}
+                    <a class="ui item" href="{{ url_for('login_page') }}"><i class="sign in icon"></i>Login</a>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
-
-<div class="ui pusher padded">
-    <h1> {% block title %}{% endblock %} </h1>
-    {% block panel %}
-    {% endblock %}
+<div id="content" class="ui container">
+    <div class="ui pusher padded">
+        <h1> {% block title %}{% endblock %} </h1>
+        {% block panel %}
+        {% endblock %}
+    </div>
 </div>
   <!-- Footer -->
 {% endblock %}

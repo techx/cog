@@ -22,10 +22,8 @@
     {% endblock %}
   </head>
   <body>
-    <div id="content" class="ui container">
-      {% block content %}
-      {% endblock %}
-    </div>
+    {% block content %}
+    {% endblock %}
 
     <div class="footer">
         {{ config['APP_NAME'] }} powered by <a href="https://github.com/techx/cog">Cog</a>, 

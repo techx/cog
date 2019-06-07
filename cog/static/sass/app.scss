@@ -1,3 +1,10 @@
+@import './nav.scss';
+@import './modals.scss';
+
+body {
+  padding-top: 60px;
+}
+
 #login-wrapper {
     max-width: 450px;
     margin-top: 35px;
