@@ -6,10 +6,10 @@
 {% else %}
 {% set count = item.quantity %}
 {% endif %}
-<div class="row" >
+<div class="row inventory-item">
     <div class="ten wide column">
         <div class="ui items">
-            <div class="item">
+            <div class="item inventory-item-content">
                 <div class="ui tiny image">
                     {% if admin and not item.is_visible %}
                         <div class="ui inverted active dimmer">
@@ -60,7 +60,13 @@
             {% if item.requires_checkout and not item.requires_lottery %}
             <form class="form request-form"  method="post">
                 <div class="ui action input">
-                    <input type="number" name="quantity" value="1" min="1" max="5">
+                    <select name="quantity" value="1" class="ui select">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
                     <button data-item-id="{{ item.id }}" type="submit" class="ui primary submit button">
                     {% if count > 0 %}
                         Request Now                            
@@ -75,7 +81,13 @@
             <form class="form request-form" method="post">
                 <div class="ui action input">
                     {% if config['LOTTERY_MULTIPLE_SUBMISSIONS'] %}
-                        <input type="number" name="quantity" value="1" min="1" max="5"> 
+                        <select name="quantity" value="1" class="ui select">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
                         <button type="submit" data-item-id="{{ item.id }}" 
                             class="ui primary submit button">Submit</button>
                     {% else %}

@@ -21,17 +21,19 @@
     {% block head %}
     {% endblock %}
   </head>
-  <body>
+  <body id="body">
     {% block content %}
     {% endblock %}
 
     <div class="footer">
+      <div class="ui container">
         {{ config['APP_NAME'] }} powered by <a href="https://github.com/techx/cog">Cog</a>, 
         an <a href="https://code.hackmit.org">open source</a> project by <a href="https://hackmit.org"> HackMIT.</a>
+      </div>
     </div>
 
     <!-- Javascript Libraries -->
-    <script src="//code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='vendor/jquery/jquery-3.1.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/jquery/jquery.serialize-object.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/semantic/dist/semantic.js') }}"></script>
 

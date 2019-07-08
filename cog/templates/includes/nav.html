@@ -6,7 +6,7 @@
 {% block content %}
 <div id="navbar">
     <div class="ui container">
-        <div class="ui secondary inverted pointing menu stackable">
+        <div id="primary-menu" class="ui secondary inverted pointing menu stackable">
             <a class="item" href="{{ url_for('inventory') }}"><i class="home icon"></i>Home </a>
             {% if user.is_admin %} <a class="ui item" href="{{ url_for('get_requests') }}">Requests</a> {% endif %}
             {% if user.is_admin %} <a class="ui item" href="{{ url_for('get_users') }}">Users</a> {% endif %}
@@ -18,6 +18,10 @@
                     <a class="ui item" href="{{ url_for('login_page') }}"><i class="sign in icon"></i>Login</a>
                 {% endif %}
             </div>
+        </div>
+        <div id="mobile-menu" class="ui secondary inverted pointing menu">
+            <div class="ui item">Cog</div>
+            <button class="ui item" id="toggle-mobile"><i class="ellipsis horizontal icon"></i></button>
         </div>
     </div>
 </div>

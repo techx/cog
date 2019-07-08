@@ -1,6 +1,8 @@
 build:
 	docker-compose build
 
+sass:
+	cd cog/static && sass --watch sass/app.scss:css/app.css
 start:
 	docker-compose up -d
 	@echo "cog listening on port 80, postgres on 5432"

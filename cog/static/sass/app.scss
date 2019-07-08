@@ -1,4 +1,5 @@
 @import './nav.scss';
+@import './inventory.scss';
 @import './modals.scss';
 
 body {
@@ -15,11 +16,17 @@ body {
     vertical-align: middle;
 }
 
+.ui.select {
+  border: 1px solid #CCC;
+  border-right-style: none;
+  display: block;
+  background: transparent;
+  border-radius: 3px 0 0 3px;
+}
+
 .footer {
     color: #777;
-    padding-bottom: 1em;
-    padding-top: 3em;
-    text-align: center;
+    padding: 3em 0;
 }
 
 

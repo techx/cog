@@ -8,6 +8,7 @@ function init_request_actions() {
             alert(err.message)
         }
     });
+    $('#inventory-requests-count').text($('#my_requests tbody>tr').length);
 }
 
 $(document).ready(function() {
@@ -136,6 +137,10 @@ $(document).ready(function() {
 
     $('select.dropdown').dropdown();
 
+    $('#inventory-requests-toggle').click(() => {
+        $('#inventory-requests-toggle, #inventory-requests').toggleClass('visible');
+    });
+
     var socket = io.connect(location.protocol + '//' + document.domain + ':' 
         + location.port + '/user');
     socket.on('connect', function() {
@@ -148,6 +153,7 @@ $(document).ready(function() {
             $('#my_requests').fadeOut(100, function() {
                 $(this).html(data.requests)
                     .fadeIn(100, init_request_actions);
+                $('#inventory-requests-count').text($('#my_requests tbody>tr').length);
             });
         }
     });
