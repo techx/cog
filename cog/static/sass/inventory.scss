@@ -1,4 +1,8 @@
 #body {
+    #checkout_accordion .title {
+        border-bottom: 1px solid #CCC;
+        position: sticky;
+    }
     #inventory-requests-prompt {
         display: none;
         position: fixed;
@@ -34,10 +38,12 @@
     #inventory-requests {
         margin-top: -7em;
     }
+    .inventory-item.row {
+        border-bottom: 1px solid #EAEAEA;
+        margin-top: 1em;
+    }
     @media(max-width: 767px) {
         .inventory-item.row {
-            margin-left: 1em;
-            border-bottom: 1px solid #CCC;
             .inventory-item-content, .ui.items:not(.unstackable)>.item {
                 flex-direction: row !important;
                 margin: 0 !important;
@@ -72,8 +78,13 @@
                 }
             }
         }
+        #checkout_accordion .title {
+            margin: 0 -1em;
+            padding: 1em;
+        }
         #inventory {
             padding-left: 0 !important;
+            padding-right: 0 !important;
         }
         #inventory-requests-prompt {
             display: flex;
