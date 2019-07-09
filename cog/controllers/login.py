@@ -36,19 +36,7 @@ def login_page():
     token = request.cookies.get(COOKIE_NAME, '')
     if True: #token != '':
         # Attempt to grab the user details
-        # r = json.loads(requests.get('https://hackerapi.com/v2/users/me?token=' + token).text)
-        r = json.loads("""
-            {
-                "id": 1850,
-                "email": "kevin.pei@hackthenorth.com",
-                "event_roles": [{
-                    "event_slug": "hackthenorth2019",
-                    "role": "organizer"
-                }],
-                "name": "Kevin Pei",
-                "phone_number": "111-222-3333"
-            }
-        """)
+        r = json.loads(requests.get('https://hackerapi.com/v2/users/me?token=' + token).text)
         if 'id' in r and 'email' in r and 'event_roles' in r:
 
             event_roles = r['event_roles']
