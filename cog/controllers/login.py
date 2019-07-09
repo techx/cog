@@ -34,7 +34,7 @@ def login_page():
             pass 
 
     token = request.cookies.get(COOKIE_NAME, '')
-    if True: #token != '':
+    if token != '':
         # Attempt to grab the user details
         r = json.loads(requests.get('https://hackerapi.com/v2/users/me?token=' + token).text)
         if 'id' in r and 'email' in r and 'event_roles' in r:
