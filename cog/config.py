@@ -84,4 +84,4 @@ to a form of ID until the item is returned."""
 FREE_TEXT = """Just come to the hardware desk and ask for any of these
 items!"""
 
-MLH_TEXT = """You need to check these items out through MLH Hardware"""
+MLH_TEXT = """First come, first served day of the event. Checked out via the MLH hardware system."""

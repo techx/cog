@@ -54,6 +54,12 @@
 <div class="ui stackable two column grid">
     <div class="row">
         <div class="eleven wide column" id="inventory">
+            <div class="ui info message">
+                <div class="header">
+                    Can't find what you need?
+                </div>
+                <p>If you need anything not currently in our inventory, email <a href="mailto:anna@hackthenorth.com">anna@hackthenorth.com</a> and we’ll try to get it for you to use at the event</p>
+            </div>
             {% if lottery_items %}
                 <h2>Lottery Required</h2>
                 <span> {{ config['LOTTERY_TEXT'] }} </span>

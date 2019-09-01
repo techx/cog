@@ -71,7 +71,7 @@
         },
         "MLH_TEXT": {
             "description": "The info text underneath the 'MLH Item' section",
-            "value": "You need to check these items out through MLH Hardware",
+            "value": "First come, first served day of the event. Checked out via the MLH hardware system.",
             "required": false
         }
     },
