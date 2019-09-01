@@ -77,7 +77,7 @@ def login_page():
         response = app.make_response(render_template('pages/login.html'))
         response.set_cookie(COOKIE_NAME, '')
         return response
-    return redirect('https://auth.hackthenorth.com/?redirect=cog.team.hackthenorth.com/login')
+    return redirect('https://auth.hackthenorth.com/?redirect=hardware.hackthenorth.com/login')
     
 
 @app.route('/logout')
