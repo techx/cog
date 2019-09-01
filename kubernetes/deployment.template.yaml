@@ -31,7 +31,7 @@ spec:
         app: cog-hackthenorth-com
     spec:
       volumes:
-        - name: secrets
+        - name: "$CREDENTIALS_SECRET"
           secret:
             secretName: "$CREDENTIALS_SECRET"
       containers:
@@ -47,7 +47,7 @@ spec:
           allowPrivilegeEscalation: false
         # [END cloudsql_security_context]
         volumeMounts:
-          - name: secrets
+          - name: "$CREDENTIALS_SECRET"
             mountPath: /secrets/cloudsql
             readOnly: true
         resources:
@@ -65,7 +65,7 @@ spec:
         - name: DB_PASS
           valueFrom:
             secretKeyRef:
-              name: secrets
+              name: "$CREDENTIALS_SECRET"
               key: password
         - name: DATABASE_URI
           value: postgres://postgres:$(DB_PASS)@localhost/cog
