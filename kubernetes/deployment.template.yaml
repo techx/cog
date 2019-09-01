@@ -31,26 +31,26 @@ spec:
         app: cog-hackthenorth-com
     spec:
       containers:
-        # [START proxy_container]
-        - name: cloudsql-proxy
-          image: gcr.io/cloudsql-docker/gce-proxy:1.11
-          command: ["/cloud_sql_proxy",
-                    "-instances=htn-techyon:northamerica-northeast1:main=tcp:5432",
-                    "-credential_file=/secrets/cloudsql/credentials.json"]
-          # [START cloudsql_security_context]
-          securityContext:
-            runAsUser: 2  # non-root user
-            allowPrivilegeEscalation: false
-          # [END cloudsql_security_context]
-          volumeMounts:
-            - name: "$CREDENTIALS_SECRET"
-              mountPath: /secrets/cloudsql
-              readOnly: true
-          resources:
-            limits:
-              cpu: 25m
-              memory: "0.05G"
-        # [END proxy_container]
+      # [START proxy_container]
+      - name: cloudsql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.11
+        command: ["/cloud_sql_proxy",
+                  "-instances=htn-techyon:northamerica-northeast1:main=tcp:5432",
+                  "-credential_file=/secrets/cloudsql/credentials.json"]
+        # [START cloudsql_security_context]
+        securityContext:
+          runAsUser: 2  # non-root user
+          allowPrivilegeEscalation: false
+        # [END cloudsql_security_context]
+        volumeMounts:
+          - name: "$CREDENTIALS_SECRET"
+            mountPath: /secrets/cloudsql
+            readOnly: true
+        resources:
+          limits:
+            cpu: 25m
+            memory: "0.05G"
+      # [END proxy_container]
       - name: cog-hackthenorth-com
         image: gcr.io/htn-techyon/cog-hackthenorth-com
         ports:
