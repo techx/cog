@@ -31,24 +31,40 @@ spec:
         app: cog-hackthenorth-com
     spec:
       containers:
-      - name: database
-        image: postgres:9.6-alpine
-        env:
-        - name: POSTGRES_PASSWORD
-          value: password
-        resources:
-          requests:
-            cpu: 25m
-            memory: "0.05G"
+        # [START proxy_container]
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.11
+          command: ["/cloud_sql_proxy",
+                    "-instances=htn-techyon:northamerica-northeast1:main=tcp:5432",
+                    "-credential_file=/secrets/cloudsql/credentials.json"]
+          # [START cloudsql_security_context]
+          securityContext:
+            runAsUser: 2  # non-root user
+            allowPrivilegeEscalation: false
+          # [END cloudsql_security_context]
+          volumeMounts:
+            - name: "$CREDENTIALS_SECRET"
+              mountPath: /secrets/cloudsql
+              readOnly: true
+          resources:
+            limits:
+              cpu: 25m
+              memory: "0.05G"
+        # [END proxy_container]
       - name: cog-hackthenorth-com
         image: gcr.io/htn-techyon/cog-hackthenorth-com
         ports:
         - containerPort: 80
         env:
         - name: ENV
-          value: test
+          value: production
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: "$CREDENTIALS_SECRET"
+              key: password
         - name: DATABASE_URI
-          value: "$ENV_DB"
+          value: postgres://postgres:$(DB_PASS)@localhost/cog
         - name: SECRET
           value: "$ENV_SECRET"
         resources:
