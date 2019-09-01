@@ -14,6 +14,6 @@ class InventoryUpdateForm(Form):
     category = StringField('category', [validators.input_required()])
     image = StringField('image', [validators.Optional(), validate_image], default='/static/images/default.png')
     item_type = SelectField('item_type', [validators.input_required()], 
-        choices=[('free', 'Free to Take'), ('checkout', 'Requires Checkout'), ('lottery', 'Requires Lottery')])
+        choices=[('free', 'Free to Take'), ('checkout', 'Requires Checkout'), ('lottery', 'Requires Lottery'), ('mlh', 'MLH Item')])
     visible = BooleanField('visible')
 

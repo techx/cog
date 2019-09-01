@@ -74,6 +74,13 @@
 
                 {{ accordion_list(free_items, "free_accordion") }}
             {% endif %}
+
+            {% if mlh_items %}
+                <h2>MLH Items</h2>
+                <span> {{ config['MLH_TEXT'] }} </span>
+
+                {{ accordion_list(mlh_items, "mlh_accordion") }}
+            {% endif %}
         </div>
         <div class="five wide column" id="inventory-requests">
             <div class="ui sticky">

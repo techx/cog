@@ -83,3 +83,5 @@ to a form of ID until the item is returned."""
 # The info text underneath the 'No Checkout Required' section 
 FREE_TEXT = """Just come to the hardware desk and ask for any of these
 items!"""
+
+MLH_TEXT = """You need to check these items out through MLH Hardware"""

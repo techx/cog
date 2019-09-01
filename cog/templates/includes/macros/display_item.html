@@ -57,6 +57,11 @@
                 <div> <strong>Quantity:</strong> {{ count }} </div> 
                 <br>
             {% endif %}
+            {% if item.requires_mlh %}
+                <br>
+                <br>
+                <a href="https://hardware.mlh.io" target="_blank" class="ui primary button">Find on MLH</a>
+            {% endif %}
             {% if item.requires_checkout and not item.requires_lottery %}
             <form class="form request-form"  method="post">
                 <div class="ui action input">

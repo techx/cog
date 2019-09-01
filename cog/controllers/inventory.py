@@ -49,6 +49,8 @@ def inventory():
         item_type = ItemType.CHECKOUT)
     free_query = InventoryEntry.query.filter_by(
         item_type = ItemType.FREE)
+    mlh_query = InventoryEntry.query.filter_by(
+        item_type = ItemType.MLH)
 
     # total number of items that exist by id
     total_item_quants = db.session.query(Item.entry_id, func.count(Item.entry_id))\
@@ -80,6 +82,7 @@ def inventory():
             lottery_items = lottery_query.all(),
             checkout_items = checkout_query.all(),
             free_items = free_query.all(),
+            mlh_items = mlh_query.all(),
             counts = counts,
             requests = requests,
             RequestStatus=RequestStatus, user=user)
@@ -88,6 +91,7 @@ def inventory():
             lottery_items = lottery_query.filter_by(is_visible = True).all(),
             checkout_items = checkout_query.filter_by(is_visible = True).all(),
             free_items = free_query.filter_by(is_visible = True).all(),
+            mlh_items = mlh_query.all(),
             counts = counts,
             requests = requests,
             RequestStatus=RequestStatus, user=user)
@@ -231,6 +235,8 @@ def create_item(form):
         item_type = ItemType.CHECKOUT
     elif form.item_type.data == 'lottery':
         item_type = ItemType.LOTTERY
+    elif form.item_type.data == 'mlh':
+        item_type = ItemType.MLH
 
     image = url_for('static', filename='images/default.png')
     if form.image.data != '': image = form.image.data
@@ -346,6 +352,8 @@ def inventory_update(id):
             item_type = ItemType.CHECKOUT
         elif form.item_type.data == 'lottery':
             item_type = ItemType.LOTTERY
+        elif form.item_type.data == 'mlh':
+            item_type = ItemType.MLH
 
         item.item_type = item_type
 

@@ -68,6 +68,11 @@
             "description": "The info text underneath the 'No Checkout Required' section",
             "value": "Just come to the hardware desk and ask for any of these items!",
             "required": false
+        },
+        "MLH_TEXT": {
+            "description": "The info text underneath the 'MLH Item' section",
+            "value": "You need to check these items out through MLH Hardware",
+            "required": false
         }
     },
     "addons": [

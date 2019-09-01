@@ -79,6 +79,7 @@ set_conf_bool(app, 'DENY_LOTTERY_LOSERS')
 set_conf_str(app, 'LOTTERY_TEXT')
 set_conf_str(app, 'CHECKOUT_TEXT')
 set_conf_str(app, 'FREE_TEXT')
+set_conf_str(app, 'MLH_TEXT')
 set_conf_int(app, 'LOTTERY_CHAR_LIMIT')
 
 from cog.models import db
