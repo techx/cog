@@ -47,7 +47,7 @@ def login_page():
         r = json.loads(requests.get('https://hackerapi.com/v2/users/me?token=' + token).text)
         if 'id' in r and 'email' in r:
             is_organizer = 'event_roles' in r and check_role(r['event_roles'], 'organizer')
-            hacker = check_is_hacker(token, is_organizer)
+            hacker = get_hacker(token, is_organizer)
 
             is_hacker = hacker.get('name', None) != None
 
