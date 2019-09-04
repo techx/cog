@@ -21,6 +21,13 @@ def check_role(roles, role):
         for d in roles
     )
 
+def check_is_hacker(token):
+    req = requests.get('https://hackerapi.com/v2/events/hackthenorth2019/applications/me?token=' + token)
+    if req.ok:
+        r = json.loads(req.text)
+        return r['stage'] == 'confirmed'
+    return False
+
 COOKIE_NAME = '__hackerapi-token-client-only__'
 
 @app.route('/login')
@@ -37,11 +44,9 @@ def login_page():
     if token != '':
         # Attempt to grab the user details
         r = json.loads(requests.get('https://hackerapi.com/v2/users/me?token=' + token).text)
-        if 'id' in r and 'email' in r and 'event_roles' in r:
-
-            event_roles = r['event_roles']
-            is_organizer = check_role(event_roles, 'organizer')
-            is_hacker = check_role(event_roles, 'hacker') 
+        if 'id' in r and 'email' in r:
+            is_organizer = 'event_roles' in r and check_role(r['event_roles'], 'organizer')
+            is_hacker = is_organizer == False and check_is_hacker(token)
 
             if is_organizer or is_hacker:
 
