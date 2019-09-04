@@ -21,12 +21,13 @@ def check_role(roles, role):
         for d in roles
     )
 
-def check_is_hacker(token):
-    req = requests.get('https://hackerapi.com/v2/events/hackthenorth2019/applications/me?token=' + token)
-    if req.ok:
-        r = json.loads(req.text)
-        return r['stage'] == 'confirmed'
-    return False
+def get_hacker(token, is_organizer):
+    if is_organizer == False:
+        req = requests.get('https://hackerapi.com/v2/events/hackthenorth2019/applications/me?token=' + token)
+        if req.ok:
+            r = json.loads(req.text)
+            return r
+    return dict()
 
 COOKIE_NAME = '__hackerapi-token-client-only__'
 
@@ -46,14 +47,16 @@ def login_page():
         r = json.loads(requests.get('https://hackerapi.com/v2/users/me?token=' + token).text)
         if 'id' in r and 'email' in r:
             is_organizer = 'event_roles' in r and check_role(r['event_roles'], 'organizer')
-            is_hacker = is_organizer == False and check_is_hacker(token)
+            hacker = check_is_hacker(token, is_organizer)
+
+            is_hacker = hacker.get('name', None) != None
 
             if is_organizer or is_hacker:
 
                 hackerapi_id = str(r['id'])
 
-                name = r.get('legal_name', r.get('name', ''))
-                email = r['email']
+                name = hacker.get('name', r.get('legal_name', r.get('name', '')))
+                email = hacker.get('email', r['email'])
                 phone = r.get('phone_number', '')
 
                 user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
