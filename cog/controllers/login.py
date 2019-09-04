@@ -75,12 +75,12 @@ def login_page():
 
                 response = app.make_response(redirect('/inventory'))
                 response.set_cookie('jwt', token)
-                response.set_cookie(COOKIE_NAME, '')
+                response.set_cookie(COOKIE_NAME, '', domain='.hackthenorth.com')
 
                 return response
          
         response = app.make_response(render_template('pages/login.html'))
-        response.set_cookie(COOKIE_NAME, '')
+        response.set_cookie(COOKIE_NAME, '', domain='.hackthenorth.com')
         return response
     return redirect('https://auth.hackthenorth.com/?redirect=hardware.hackthenorth.com/login')
     
