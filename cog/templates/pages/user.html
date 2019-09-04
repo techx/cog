@@ -29,7 +29,7 @@
             <input type="text" name="location" placeholder="Location" value="{{ target.location }}">
         </div>
         <div class="five wide field">
-            <input type="text" name="phone" {% if target.phone != '' %} disabled {% endif %} placeholder="Phone Number" value="{{ target.phone }}">
+            <input type="text" name="phone" placeholder="Phone Number" value="{{ target.phone }}">
         </div>
         <div class="four wide field">
             <button class="ui primary update-user button" data-id="{{ target.id }}" type="submit">
