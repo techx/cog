@@ -49,7 +49,7 @@ def login_page():
             is_organizer = 'event_roles' in r and check_role(r['event_roles'], 'organizer')
             hacker = get_hacker(token, is_organizer)
 
-            is_hacker = hacker.get('name', None) != None
+            is_hacker = hacker.get('stage', None) == 'checked_in' or hacker.get('stage', None) == 'confirmed' 
 
             if is_organizer or is_hacker:
 
