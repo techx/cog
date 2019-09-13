@@ -56,22 +56,22 @@
         },
         "LOTTERY_TEXT": {
             "description": "The info text underneath the 'Lottery Required' section",
-            "value": "We have a limited quantity of these items. Please fill out a brief proposal describing your project idea, and we'll randomly accept as many requests as we can 30 minutes after hacking starts.",
+            "value": "We have a limited quantity of these items. Please fill out a brief proposal describing your project idea by 12:30. If you are randomly selected to hack on one of these items, we will call you to the desk by text.",
             "required": false
         },
         "CHECKOUT_TEXT": {
             "description": "The info text underneath the 'Checkout Required' section",
-            "value": "Click to request any of these items, and your request will be approved when we have one available. Keep in mind we will ask to hold on to a form of ID until the item is returned.",
+            "value": "Click to request any of these items. We will text you when your hardware is ready for pickup. Keep in mind we will ask to hold on to a form of ID until the item is returned.",
             "required": false
         },
         "FREE_TEXT": {
             "description": "The info text underneath the 'No Checkout Required' section",
-            "value": "Just come to the hardware desk and ask for any of these items!",
+            "value": "Pick these up from the tool shop at any time. Please don't take more than you need, and return the items at the end of the event!",
             "required": false
         },
         "MLH_TEXT": {
             "description": "The info text underneath the 'MLH Item' section",
-            "value": "First come, first served day of the event. Checked out via the MLH hardware system.",
+            "value": "If you would like to sign out any of these items, request them through the MLH portal, then wait in the MLH line.",
             "required": false
         }
     },

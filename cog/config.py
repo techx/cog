@@ -71,17 +71,17 @@ DISPLAY_CHECKOUT_QUANTITY = True
 LOTTERY_MULTIPLE_SUBMISSIONS = False 
 
 # The info text underneath the 'Lottery Required' section 
-LOTTERY_TEXT = """We have a limited quantity of these items. Please fill out a 
-brief proposal describing your project idea, and we'll randomly accept as many 
-requests as we can 30 minutes after hacking starts."""
+LOTTERY_TEXT = """We have a limited quantity of these items. 
+Please fill out a brief proposal describing your project idea by 12:30. 
+If you are randomly selected to hack on one of these items, we will call you to the desk by text."""
 
 # The info text underneath the 'Checkout Required' section 
-CHECKOUT_TEXT = """Click to request any of these items, and your request will
-be approved when we have one available. Keep in mind we will ask to hold on
-to a form of ID until the item is returned."""
+CHECKOUT_TEXT = """Click to request any of these items. 
+We will text you when your hardware is ready for pickup. 
+Keep in mind we will ask to hold on to a form of ID until the item is returned."""
 
 # The info text underneath the 'No Checkout Required' section 
-FREE_TEXT = """Just come to the hardware desk and ask for any of these
-items!"""
+FREE_TEXT = """Pick these up from the tool shop at any time. 
+Please don't take more than you need, and return the items at the end of the event!"""
 
-MLH_TEXT = """First come, first served day of the event. Checked out via the MLH hardware system."""
+MLH_TEXT = """If you would like to sign out any of these items, request them through the MLH portal, then wait in the MLH line."""
