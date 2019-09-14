@@ -4,12 +4,12 @@ import random
 import string
 
 from flask import Flask, session, request, abort
-from flask_socketio import SocketIO
+# from flask_socketio import SocketIO
 from urllib.parse import urlsplit
 from flaskext.markdown import Markdown
 
 from cog.utils import display_date, deltatimeformat
-from cog.models.socket import Socket
+# from cog.models.socket import Socket
 from flask_sslify import SSLify
 
 app = Flask(__name__)
@@ -94,14 +94,14 @@ Markdown(app)
 if get_conf_bool("FORCE_SSL"):
     SSLify(app)
 
-socketio = SocketIO()
-socketio.init_app(app)
+# socketio = SocketIO()
+# socketio.init_app(app)
 
 import cog.controllers # registers controllers
 
 # delete stale sockets from previous open sessions
 try: 
-    Socket.query.delete()
+    # Socket.query.delete()
     db.session.commit()
 except: 
     # exception if DB not yet initialized

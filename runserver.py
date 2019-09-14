@@ -1,4 +1,4 @@
-from cog import app, socketio
+from cog import app# , socketio
 from initialize import rebuild 
 import sys
 import os
@@ -10,4 +10,4 @@ if __name__ == '__main__':
         port = int(sys.argv[1]) 
     except (IndexError, ValueError):
         port = 80
-    socketio.run(app, host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port)

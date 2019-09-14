@@ -1,5 +1,5 @@
 from cog import app
-from cog import socketio
+# from cog import socketio
 from cog.models import db
 
 from cog.models.request import Request, RequestStatus
@@ -8,7 +8,7 @@ from cog.models.inventory_entry import ItemType
 from cog.models.user import User
 from cog.models.item import Item
 from cog.models.request_item import RequestItem
-from cog.models.socket import Socket
+# from cog.models.socket import Socket
 
 from cog.utils import requires_auth, requires_admin, verify_token
 from sqlalchemy import event
@@ -213,51 +213,51 @@ def request_deny(id):
         success=True,
     )
 
-@socketio.on('connect', namespace='/admin')
-def authenticate_admin_conection():
-    """Callback when client connects to /admin namespace, returns True
-    if admin and False otherwise
-    """
-    if 'jwt' in request.cookies:
-        hackerapi_id = verify_token(request.cookies['jwt'])
-        if not hackerapi_id:
-            return False
-        user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
+# @socketio.on('connect', namespace='/admin')
+# def authenticate_admin_conection():
+#     """Callback when client connects to /admin namespace, returns True
+#     if admin and False otherwise
+#     """
+#     if 'jwt' in request.cookies:
+#         hackerapi_id = verify_token(request.cookies['jwt'])
+#         if not hackerapi_id:
+#             return False
+#         user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
 
-        if user == None or not user.is_admin:
-            return False
+#         if user == None or not user.is_admin:
+#             return False
 
-        return True
-    else:
-        return False
+#         return True
+#     else:
+#         return False
 
-@socketio.on('connect', namespace='/user')
-def authenticate_user_conection():
-    """Callback when client connects to /user namespace, returns True
-    if logged in and False otherwise
-    """
-    if 'jwt' in request.cookies:
-        hackerapi_id = verify_token(request.cookies['jwt'])
-        if not hackerapi_id:
-            return False
-        user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
+# @socketio.on('connect', namespace='/user')
+# def authenticate_user_conection():
+#     """Callback when client connects to /user namespace, returns True
+#     if logged in and False otherwise
+#     """
+#     if 'jwt' in request.cookies:
+#         hackerapi_id = verify_token(request.cookies['jwt'])
+#         if not hackerapi_id:
+#             return False
+#         user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
 
-        if user == None:
-            return False
+#         if user == None:
+#             return False
 
-        socket = Socket(request.sid, user)
-        db.session.add(socket)
-        db.session.commit()
-        return True
-    else:
-        return False
+#         socket = Socket(request.sid, user)
+#         db.session.add(socket)
+#         db.session.commit()
+#         return True
+#     else:
+#         return False
 
-@socketio.on('disconnect', namespace='/user')
-def user_disconnect():
-    """Delete user's socket when they disconnect"""
-    socket = Socket.query.get(request.sid)
-    db.session.delete(socket)
-    db.session.commit()
+# @socketio.on('disconnect', namespace='/user')
+# def user_disconnect():
+#     """Delete user's socket when they disconnect"""
+#     socket = Socket.query.get(request.sid)
+#     db.session.delete(socket)
+#     db.session.commit()
 
 def on_request_insert(mapper, connection, target):
     """Callback for when new request is inserted into DB"""
@@ -270,7 +270,7 @@ def on_request_update(mapper, connection, target):
 def request_change_handler(target):
     """Handler that sends updated HTML for rendering requests"""
     user = target.user
-    sockets = Socket.query.filter_by(user=user).all()
+    # sockets = Socket.query.filter_by(user=user).all()
 
     requests = Request.query.filter(Request.user == user, Request.status.in_(
         [RequestStatus.APPROVED, RequestStatus.SUBMITTED, RequestStatus.DENIED])).all()
@@ -281,10 +281,10 @@ def request_change_handler(target):
                         admin = False,
                         time = False)
 
-    for socket in sockets:
-        socketio.emit('update', {
-            'requests': requests_html,
-        }, namespace='/user', room=socket.sid)
+    # for socket in sockets:
+    #     socketio.emit('update', {
+    #         'requests': requests_html,
+    #     }, namespace='/user', room=socket.sid)
 
     # TODO: add check if at least one admin is connected
     approved_requests = render_template('includes/macros/display_requests.html',
@@ -313,11 +313,11 @@ def request_change_handler(target):
             }
         )
 
-    socketio.emit('update', {
-        'approved_requests': approved_requests,
-        'submitted_requests': submitted_requests,
-        'lottery_quantities': lottery_quantities
-    }, namespace='/admin')
+    # socketio.emit('update', {
+    #     'approved_requests': approved_requests,
+    #     'submitted_requests': submitted_requests,
+    #     'lottery_quantities': lottery_quantities
+    # }, namespace='/admin')
 
 # listeners for change to Request database
 event.listen(RequestItem, 'after_insert', on_request_insert)

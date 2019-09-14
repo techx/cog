@@ -11,7 +11,7 @@ class User(db.Model):
     notifications = db.Column(db.Boolean)
     have_their_id = db.Column(db.Boolean)
     requests = db.relationship('Request', back_populates='user')
-    sockets = db.relationship('Socket', back_populates='user')
+    # sockets = db.relationship('Socket', back_populates='user')
 
     items = db.relationship('Item', backref='user')
 
