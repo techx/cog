@@ -141,20 +141,20 @@ $(document).ready(function() {
         $('#inventory-requests-toggle, #inventory-requests').toggleClass('visible');
     });
 
-    var socket = io.connect(location.protocol + '//' + document.domain + ':' 
-        + location.port + '/user');
-    socket.on('connect', function() {
-        console.log('Socket connected!')
-        socket.emit('', {data: 'I\'m connected!'});
-    });
+    // var socket = io.connect(location.protocol + '//' + document.domain + ':' 
+    //     + location.port + '/user');
+    // socket.on('connect', function() {
+    //     console.log('Socket connected!')
+    //     socket.emit('', {data: 'I\'m connected!'});
+    // });
     
-    socket.on('update', function(data) {
-        if (data.requests) {
-            $('#my_requests').fadeOut(100, function() {
-                $(this).html(data.requests)
-                    .fadeIn(100, init_request_actions);
-                $('#inventory-requests-count').text($('#my_requests tbody>tr').length);
-            });
-        }
-    });
+    // socket.on('update', function(data) {
+    //     if (data.requests) {
+    //         $('#my_requests').fadeOut(100, function() {
+    //             $(this).html(data.requests)
+    //                 .fadeIn(100, init_request_actions);
+    //             $('#inventory-requests-count').text($('#my_requests tbody>tr').length);
+    //         });
+    //     }
+    // });
 });
