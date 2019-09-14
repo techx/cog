@@ -14,6 +14,8 @@ from flask_sslify import SSLify
 
 app = Flask(__name__)
 
+app.config['SQLALCHEMY_POOL_SIZE'] = 2
+
 import cog.config as config
 
 
