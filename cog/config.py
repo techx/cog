@@ -36,7 +36,7 @@ FORCE_SSL = False
 
 ## Metadata ## 
 
-HACKATHON_NAME = "Hack the North"
+HACKATHON_NAME = "TreeHacks"
 
 ## Event logistical settings ##
 

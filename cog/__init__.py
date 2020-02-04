@@ -98,6 +98,7 @@ if get_conf_bool("FORCE_SSL"):
 # socketio.init_app(app)
 
 import cog.controllers # registers controllers
+import cog.filters
 
 # delete stale sockets from previous open sessions
 try: 

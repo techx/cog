@@ -31,8 +31,13 @@ def get_hacker(token, is_organizer):
 
 COOKIE_NAME = '__hackerapi-token-client-only__'
 
-@app.route('/login')
+@app.route('/login', methods=['GET'])
 def login_page():
+    response = app.make_response(render_template('pages/login.html'))
+    return response
+
+@app.route('/login', methods=['POST'])
+def login_token_verify_page():
     """If not logged in render login page, otherwise redirect to inventory"""
     if 'jwt' in request.cookies:
         try:
@@ -83,9 +88,9 @@ def login_page():
                 return response
          
         response = app.make_response(render_template('pages/login.html'))
-        response.set_cookie(COOKIE_NAME, '', domain='.hackthenorth.com')
+        response.set_cookie(COOKIE_NAME, '', domain='.treehacks.com')
         return response
-    return redirect('https://auth.hackthenorth.com/?redirect=hardware.hackthenorth.com/login')
+    return redirect('https://login.dev.treehacks.com/?redirect=http://localhost:3000/login')
     
 
 @app.route('/logout')

@@ -2,11 +2,49 @@
 {% block title %} Login {% endblock %}
 
 {% block content %}
-<div class="ui middle aligned center aligned grid"> 
+<div class="ui middle aligned center aligned grid">
     <div id="login-wrapper" class="ui segment column">
         <h2 class="ui header"> {{ config["HACKATHON_NAME"] }} Hardware </h2>
-        <span>The Hardware Dashboard is only available to registered hackers.</span>
+        <span id="message">The Hardware Dashboard is only available to registered hackers.</span>
     </div>
 </div>
 {% endblock %}
 
+{% block end %}
+<script type="application/json"
+    id="treehacks-login-url">{{ "https://login.treehacks.com" | env_override('LOGIN_URL') }}</script>
+<script>
+    (function () {
+        // From https://github.com/youbastard/jquery.getQueryParameters/blob/master/qp.js
+        var getQueryParameters = function(str) {
+            return (str || document.location.search).replace(/(^\?)/,'').split("&").map(function(n){return n=n.split("="),this[n[0]]=n[1],this;}.bind({}))[0];
+        };
+        $(function () {
+            function login() {
+                window.location.href = LOGIN_URL + "?redirect=" + window.location.href;
+            }
+            var LOGIN_URL = document.getElementById("treehacks-login-url").innerHTML;
+            var hash = getQueryParameters(window.location.hash.substring(1)); // remove starting # from hash
+            if (hash && hash.jwt) {
+                window.location.hash = "";
+                $("#message").html("Loading...");
+                $.ajax({
+                    type: "POST",
+                    url: "",
+                    headers: {
+                        Authorization: hash.jwt
+                    },
+                    error: function () {
+                        $("#message").html("Sorry, there was an error.");
+                    },
+                    success: function () {
+                        window.location.href = "/";
+                    }
+                });
+            } else {
+                login();
+            }
+        });
+    })();
+</script>
+{% endblock %}
