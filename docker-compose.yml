@@ -18,7 +18,7 @@ services:
       - ENDPOINT_URL=https://root.dev.treehacks.com/api
       - DATABASE_URL=postgres://postgres:password@dev_db/postgres
       - FLASK_DEBUG=1
-      - FLASK_RUN_PORT=8000
+      - PORT=8000
     ports:
       - 127.0.0.1:8000:8000
     depends_on:
