@@ -10,7 +10,7 @@ import os
 DB_URI = os.environ['DATABASE_URL']
 
 # Random Secret for JWTs
-SECRET = os.environ['SECRET']
+SECRET = os.getenv('SECRET', '')
 
 
 ### The following variables may all be set using environment 
