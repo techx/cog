@@ -2,6 +2,7 @@ import uuid
 from jose import jws
 from jose.exceptions import JWSError
 import os
+import requests
 from cog.config import *
 from cog.constants import *
 from cog.models.user import *
@@ -28,12 +29,21 @@ def safe_redirect(endpoint, request):
         ), 401
     return redirect(url_for(endpoint))
 
+def get_profile_from_jwt(jwt):
+    try:
+        r = requests.get(os.getenv("ENDPOINT_URL") + "/user_profile", headers={"Authorization": jwt})
+        profile = r.json()
+        return profile, profile["id"]
+    except Exception as e:
+        print(e)
+        return None, None
+
 def requires_auth():
     def decorator(f):
         @wraps(f)
         def decorated(*args, **kwargs):
             if 'jwt' in request.cookies:
-                hackerapi_id = verify_token(request.cookies['jwt'])
+                profile, hackerapi_id = get_profile_from_jwt(request.cookies['jwt'])
                 if not hackerapi_id:
                     return safe_redirect('login_page', request)
                 user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
@@ -55,7 +65,7 @@ def auth_optional():
         @wraps(f)
         def decorated(*args, **kwargs):
             if 'jwt' in request.cookies:
-                hackerapi_id = verify_token(request.cookies['jwt'])
+                profile, hackerapi_id = get_profile_from_jwt(request.cookies['jwt'])
                 if not hackerapi_id:
                     f.__globals__['user'] = None 
                     return f(*args, **kwargs)
@@ -80,7 +90,7 @@ def requires_admin():
         @wraps(f)
         def decorated(*args, **kwargs):
             if 'jwt' in request.cookies:
-                hackerapi_id = verify_token(request.cookies['jwt'])
+                profile, hackerapi_id = get_profile_from_jwt(request.cookies['jwt'])
                 if not hackerapi_id:
                     return safe_redirect('login_page', request)
                 user = User.query.filter_by(hackerapi_id=hackerapi_id).first()

@@ -1,6 +1,7 @@
 from cog import app
 from cog.config import SECRET, EVENT_SLUG
 from cog.models.user import * 
+from cog.utils import get_profile_from_jwt
 import requests
 import datetime
 import json
@@ -37,20 +38,10 @@ def login_page():
         return response
     # POST
 
-    # if 'jwt' in request.cookies:
-    #     try:
-    #         decode_token(request.cookies['jwt'])
-    #         return redirect('/inventory')
-    #     except Exception as e:
-    #         pass 
-
     jwt = request.headers.get('Authorization')
     # Attempt to grab the user details
-    try:
-        r = requests.get(os.getenv("ENDPOINT_URL") + "/user_profile", headers={"Authorization": jwt})
-        profile = r.json()
-    except Exception as e:
-        print(e)
+    profile, _ = get_profile_from_jwt(jwt)
+    if not profile:
         return 'unauthorized jwt', 401
     is_organizer = "admin" in profile.get("groups", [])
 
@@ -78,7 +69,9 @@ def login_page():
 
     db.session.commit()
 
-    return "", 204
+    response = app.make_response("")
+    response.set_cookie('jwt', jwt)
+    return response
     
     # Send user to error page.
     # response = app.make_response(render_template('pages/login.html?error=1'))
