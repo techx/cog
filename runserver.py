@@ -4,7 +4,7 @@ import sys
 import os
 
 if __name__ == '__main__':
-    if os.environ['ENV'] == 'test':
+    if os.getenv('ENV', '') == 'test':
         rebuild()
     port = int(os.getenv("FLASK_RUN_PORT", "80"))
     debug = os.getenv("FLASK_DEBUG") == "1"
