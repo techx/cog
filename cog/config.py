@@ -9,8 +9,8 @@ import os
 # used for Heroku postgres deploys.
 DB_URI = os.environ['DATABASE_URL']
 
-# Random Secret for JWTs
-SECRET = os.getenv('SECRET', '')
+# Random Secret for sessions
+SECRET = os['SECRET']
 
 
 ### The following variables may all be set using environment 
