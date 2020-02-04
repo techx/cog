@@ -16,7 +16,7 @@ services:
       - SECRET=not_a_secret
       - DATABASE_URI=postgres://postgres:password@dev_db/postgres
     ports:
-      - 127.0.0.1:80:80
+      - 127.0.0.1:8000:8000
     depends_on:
       - dev_db
     volumes:

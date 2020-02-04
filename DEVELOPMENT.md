@@ -14,4 +14,4 @@
 - `make logs` for a live stream of logs.
 
 ## Destroying 
-- Run `make stop` to run all tests
+- Run `make stop` to destroy

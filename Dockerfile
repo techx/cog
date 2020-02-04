@@ -9,6 +9,6 @@ RUN pip install -r requirements.txt
 
 ADD . $APP_PATH
 
-EXPOSE 80
-CMD ["python", "runserver.py"]
+EXPOSE 8000
+CMD ["python", "runserver.py", "8000"]
 

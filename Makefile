@@ -5,7 +5,7 @@ sass:
 	cd cog/static && sass --watch sass/app.scss:css/app.css
 start:
 	docker-compose up -d
-	@echo "cog listening on port 80, postgres on 5432"
+	@echo "cog listening on port 8000, postgres on 5432"
 	@echo "run 'make logs' to watch logs"
 
 stop:
