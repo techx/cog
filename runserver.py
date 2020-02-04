@@ -6,8 +6,6 @@ import os
 if __name__ == '__main__':
     if os.environ['ENV'] == 'test':
         rebuild()
-    try:
-        port = int(sys.argv[1]) 
-    except (IndexError, ValueError):
-        port = 80
-    app.run(host='0.0.0.0', port=port, debug=True)
+    port = int(os.getenv("FLASK_RUN_PORT", "80"))
+    debug = os.getenv("FLASK_DEBUG") == "1"
+    app.run(host='0.0.0.0', port=port, debug=debug)

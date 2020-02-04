@@ -16,7 +16,9 @@ services:
       - SECRET=not_a_secret
       - LOGIN_URL=https://login.dev.treehacks.com
       - ENDPOINT_URL=https://root.dev.treehacks.com/api
-      - DATABASE_URI=postgres://postgres:password@dev_db/postgres
+      - DATABASE_URL=postgres://postgres:password@dev_db/postgres
+      - FLASK_DEBUG=1
+      - FLASK_RUN_PORT=8000
     ports:
       - 127.0.0.1:8000:8000
     depends_on:

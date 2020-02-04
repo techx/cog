@@ -9,6 +9,6 @@ RUN pip install -r requirements.txt
 
 ADD . $APP_PATH
 
-EXPOSE 8000
-CMD ["python", "runserver.py", "8000"]
-
+EXPOSE $FLASK_RUN_PORT
+CMD ["python", "runserver.py"]
+# CMD ["flask", "run"]

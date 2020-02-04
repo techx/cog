@@ -7,7 +7,7 @@ import os
 # Postgres SQL Connection String.
 # Note: This is the default env variable name
 # used for Heroku postgres deploys.
-DB_URI = os.environ['DATABASE_URI']
+DB_URI = os.environ['DATABASE_URL']
 
 # Random Secret for JWTs
 SECRET = os.environ['SECRET']

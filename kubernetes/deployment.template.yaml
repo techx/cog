@@ -67,7 +67,7 @@ spec:
             secretKeyRef:
               name: "$DB_SECRET"
               key: password
-        - name: DATABASE_URI
+        - name: DATABASE_URL
           value: postgres://postgres:$(DB_PASS)@localhost/cog
         - name: SECRET
           value: "$ENV_SECRET"
