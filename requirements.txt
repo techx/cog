@@ -36,7 +36,7 @@ Markdown==2.6.9
 MarkupSafe==1.0
 mccabe==0.6.1
 phonenumbers==8.8.1
-psycopg2==2.7.1
+psycopg2==2.7.3.2
 py==1.4.34
 pyasn1==0.2.3
 pycodestyle==2.3.1
