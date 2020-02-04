@@ -1,8 +1,6 @@
 from cog import app
 from cog.config import SECRET, EVENT_SLUG
 from cog.models.user import * 
-from cog.utils import verify_token
-from jose import jws
 import requests
 import datetime
 import json
@@ -13,6 +11,7 @@ from flask import (
     request,
     url_for
 )
+import os
 
 def check_role(roles, role):
     return any(
@@ -31,71 +30,63 @@ def get_hacker(token, is_organizer):
 
 COOKIE_NAME = '__hackerapi-token-client-only__'
 
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    response = app.make_response(render_template('pages/login.html'))
-    return response
-
-@app.route('/login', methods=['POST'])
-def login_token_verify_page():
-    """If not logged in render login page, otherwise redirect to inventory"""
-    if 'jwt' in request.cookies:
-        try:
-            decode_token(request.cookies['jwt'])
-            return redirect('/inventory')
-        except Exception as e:
-            pass 
-
-    token = request.cookies.get(COOKIE_NAME, '')
-    if token != '':
-        # Attempt to grab the user details
-        r = json.loads(requests.get('https://hackerapi.com/v2/users/me?token=' + token).text)
-        if 'id' in r and 'email' in r:
-            is_organizer = 'event_roles' in r and check_role(r['event_roles'], 'organizer')
-            hacker = get_hacker(token, is_organizer)
-
-            is_hacker = hacker.get('stage', None) == 'checked_in' or hacker.get('stage', None) == 'confirmed' 
-
-            if is_organizer or is_hacker:
-
-                hackerapi_id = str(r['id'])
-
-                name = hacker.get('name', r.get('legal_name', r.get('name', '')))
-                email = hacker.get('email', r['email'])
-                phone = r.get('phone_number', '')
-
-                user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
-
-                if user == None:
-                    user = User(hackerapi_id, email, name, phone, is_organizer)
-                    db.session.add(user)
-                else: 
-                    if name != '':
-                        user.name = name 
-                    user.email = email
-                    if phone != '':
-                        user.phone = phone 
-                    user.is_organizer = is_organizer
-
-                db.session.commit()
-
-                token = jws.sign(hackerapi_id.encode('utf-8'), SECRET, algorithm='HS256')
-
-                response = app.make_response(redirect('/inventory'))
-                response.set_cookie('jwt', token)
-                response.set_cookie(COOKIE_NAME, '', domain='.hackthenorth.com')
-
-                return response
-         
+    if request.method == 'GET':
         response = app.make_response(render_template('pages/login.html'))
-        response.set_cookie(COOKIE_NAME, '', domain='.treehacks.com')
         return response
-    return redirect('https://login.dev.treehacks.com/?redirect=http://localhost:3000/login')
+    # POST
+
+    # if 'jwt' in request.cookies:
+    #     try:
+    #         decode_token(request.cookies['jwt'])
+    #         return redirect('/inventory')
+    #     except Exception as e:
+    #         pass 
+
+    jwt = request.headers.get('Authorization')
+    # Attempt to grab the user details
+    try:
+        r = requests.get(os.getenv("ENDPOINT_URL") + "/user_profile", headers={"Authorization": jwt})
+        profile = r.json()
+    except Exception as e:
+        print(e)
+        return 'unauthorized jwt', 401
+    is_organizer = "admin" in profile.get("groups", [])
+
+    if not is_organizer and profile.get("status") != "admission_confirmed":
+        return 'user is not admin or ADMISSION_CONFIRMED status', 403
+
+    hackerapi_id = profile["id"]
+
+    name = profile.get("first_name", "") + " " + profile.get("last_name", "")
+    email = profile.get("email")
+    phone = profile.get("phone")
+
+    user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
+
+    if user == None:
+        user = User(hackerapi_id, email, name, phone, is_organizer)
+        db.session.add(user)
+    else: 
+        if name != '':
+            user.name = name 
+        user.email = email
+        if phone != '':
+            user.phone = phone 
+        user.is_organizer = is_organizer
+
+    db.session.commit()
+
+    return "", 204
+    
+    # Send user to error page.
+    # response = app.make_response(render_template('pages/login.html?error=1'))
+    # return response
     
 
 @app.route('/logout')
 def logout():
     """Log user out"""
-    response = app.make_response(redirect('/'))
-    response.set_cookie('jwt', '')
+    response = app.make_response(redirect(os.getenv("LOGIN_URL") + "/logout"))
     return response

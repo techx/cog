@@ -15,8 +15,7 @@ services:
       - ENV=development
       - SECRET=not_a_secret
       - LOGIN_URL=https://login.dev.treehacks.com
-      - COGNITO_USER_POOL_ID=us-east-1_zraMJaf9F
-      - COGNITO_CLIENT_ID=i67d5iv8bqf2f6ele3du1j08l
+      - ENDPOINT_URL=https://root.dev.treehacks.com/api
       - DATABASE_URI=postgres://postgres:password@dev_db/postgres
     ports:
       - 127.0.0.1:8000:8000
