@@ -10,7 +10,7 @@ import os
 DB_URI = os.environ['DATABASE_URL']
 
 # Random Secret for sessions
-SECRET = os['SECRET']
+SECRET = os.environ['SECRET']
 
 
 ### The following variables may all be set using environment 
