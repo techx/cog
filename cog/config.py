@@ -36,7 +36,7 @@ FORCE_SSL = False
 
 ## Metadata ## 
 
-HACKATHON_NAME = "TreeHacks"
+HACKATHON_NAME = "Hack Better"
 
 ## Event logistical settings ##
 
@@ -72,8 +72,8 @@ LOTTERY_MULTIPLE_SUBMISSIONS = False
 
 # The info text underneath the 'Lottery Required' section 
 LOTTERY_TEXT = """We have a limited quantity of these items. 
-Please fill out a brief proposal describing your project idea by 12:30. 
-If you are randomly selected to hack on one of these items, we will call you to the desk by text."""
+Please fill out a brief proposal describing your project idea by Friday at 10:30. 
+If you are randomly selected to hack on one of these items, we will call you to the desk by Slack message."""
 
 # The info text underneath the 'Checkout Required' section 
 CHECKOUT_TEXT = """Click to request any of these items. 
