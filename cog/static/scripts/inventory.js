@@ -2,10 +2,15 @@ function init_request_actions() {
     $('.request-action').api({
         method: 'POST',
         onSuccess: function(response) {
+            if (response.message) {
+                alert(message);
+            }
+            window.location.reload();
         },
         onFailure: function(err) {
             console.log(err);
-            alert(err.message)
+            alert(err.message);
+            window.location.reload();
         }
     });
     $('#inventory-requests-count').text($('#my_requests tbody>tr').length);
@@ -106,6 +111,9 @@ $(document).ready(function() {
         beforeSend: function(settings) {
             settings.data.item_id = $(this).data('item-id');
             return settings;
+        },
+        onSuccess: function(response) {
+            window.location.reload();
         },
         onError: function(error, element, xhr) {
             // handle redirects

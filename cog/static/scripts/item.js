@@ -73,11 +73,15 @@ $(document).ready(function() {
     $('.request-action').api({
         method: 'POST',
         onSuccess: function(response) {
+            if (response.message) {
+                alert(message);
+            }
             window.location.reload();
         },
         onFailure: function(err) {
             console.log(err);
-            alert(err.message)
+            alert(err.message);
+            window.location.reload();
         }
     });
 
