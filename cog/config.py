@@ -94,6 +94,7 @@ SMTP_USERNAME = os.getenv('SMTP_USERNAME')
 SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
 SMTP_HOST = 'email-smtp.us-east-1.amazonaws.com'
 SMTP_PORT = 587
+EMAIL_SUBJECT = "TreeHacks - Your hardware checkout is ready"
 
 ## Slack notification settings ##
 

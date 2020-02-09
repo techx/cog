@@ -7,7 +7,7 @@ from cog.config import EMAIL_SENDER, EMAIL_SENDER_NAME, SMTP_USERNAME, SMTP_PASS
 
 def send_email(recipient, subject, body):
     """
-    Send email:
+    Send email. Returns true if success and false on error.
     recipient - recipient email address.
     subject - subject of email.
     body - HTML body of email.
@@ -46,6 +46,7 @@ def send_email(recipient, subject, body):
         server.close()
     # Display an error message if something goes wrong.
     except Exception as e:
-        print ("Error: ", e)
+        print ("Email error: ", e)
+        return False
     else:
-        print ("Email sent!")
+        return True

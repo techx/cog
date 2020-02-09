@@ -1,7 +1,7 @@
 from cog import app
 # from cog import socketio
 from cog.models import db
-
+from cog.config import EMAIL_SUBJECT
 from cog.models.request import Request, RequestStatus
 from cog.models.inventory_entry import InventoryEntry
 from cog.models.inventory_entry import ItemType
@@ -9,7 +9,8 @@ from cog.models.user import User
 from cog.models.item import Item
 from cog.models.request_item import RequestItem
 # from cog.models.socket import Socket
-
+from cog.tools.email import send_email
+from cog.tools.slack import send_slack
 from cog.utils import requires_auth, requires_admin, verify_token
 from sqlalchemy import event
 
@@ -18,6 +19,7 @@ from flask import (
     request,
     redirect,
     render_template,
+    render_template_string,
     jsonify
 )
 
@@ -149,9 +151,20 @@ def request_approve(id):
                     message='Out of stock!'
                 )
     request_update(id, RequestStatus.APPROVED)
-    return jsonify(
-        success=True,
-    )
+    ctx = {
+        "request_items": r.items,
+        "user": user
+    }
+    notification_sent = send_slack(user.email, render_template("messages/slack_message.html", **ctx)) or send_email(user.email, render_template_string(EMAIL_SUBJECT, **ctx), render_template("messages/email_message.html", **ctx))
+    if notification_sent:
+        return jsonify(
+            success=True
+        )
+    else:
+        return jsonify(
+            success=True,
+            message="Request was approved, but notification failed. You will need to manually notify the user."
+        )
 
 @app.route('/request/<int:id>/fulfill', methods=['POST'])
 @requires_admin()

@@ -1,0 +1,13 @@
+{% extends "includes/email_base.html" %}
+{% block title %}Your hardware checkout is ready{% endblock %}
+{% block big_header %}Yay!{% endblock %}
+{% block header %}Your hardware checkout is ready!{% endblock %}
+{% block content %}
+Hi {{user.first_name}},<br>
+Your requested items are now available! Please pick them up as soon as possible.
+<ul>
+    {% for request_item in request_items %}
+        <li>{{request_item.entry.name}}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
