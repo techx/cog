@@ -12,11 +12,13 @@ services:
     build:
       context: .
     environment:
-      - ENV=development
-      - SECRET=not_a_secret
-      - LOGIN_URL=https://login.dev.treehacks.com
-      - ENDPOINT_URL=https://root.dev.treehacks.com/api
-      - DATABASE_URL=postgres://postgres:password@dev_db/postgres
+      - LOGIN_URL=${LOGIN_URL}
+      - ENDPOINT_URL=${ENDPOINT_URL}
+      - DATABASE_URL=${DATABASE_URL}
+      - SECRET=${SECRET}
+      - SLACK_OAUTH_ACCESS_TOKEN=${SLACK_OAUTH_ACCESS_TOKEN}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
       - FLASK_DEBUG=1
       - PORT=8000
     ports:

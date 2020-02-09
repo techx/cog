@@ -85,3 +85,16 @@ FREE_TEXT = """Pick these up from the tool shop at any time.
 Please don't take more than you need, and return the items at the end of the event!"""
 
 MLH_TEXT = """If you would like to sign out any of these items, request them through the MLH portal, then wait in the MLH line."""
+
+## Email notification settings ##
+
+EMAIL_SENDER = 'hello@treehacks.com'
+EMAIL_SENDER_NAME = 'TreeHacks'
+SMTP_USERNAME = os.getenv('SMTP_USERNAME')
+SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
+SMTP_HOST = 'email-smtp.us-east-1.amazonaws.com'
+SMTP_PORT = 587
+
+## Slack notification settings ##
+
+SLACK_OAUTH_ACCESS_TOKEN = os.getenv('SLACK_OAUTH_ACCESS_TOKEN')
