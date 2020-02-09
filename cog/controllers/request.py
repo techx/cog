@@ -37,12 +37,6 @@ def get_requests():
 @requires_auth()
 def request_submit():
     """Submits new request"""
-    if not (user.location and user.phone):
-        return jsonify(
-            success=False,
-            message="""Please fill out your <a href='/user'>user info</a> before
-                requesting items!"""
-        )
     proposal = request.form.get('proposal', '')
     requested_quantity = int(request.form.get('quantity', 1))
 

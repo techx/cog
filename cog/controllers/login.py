@@ -52,19 +52,16 @@ def login_page():
 
     name = profile.get("first_name", "") + " " + profile.get("last_name", "")
     email = profile.get("email")
-    phone = profile.get("phone")
 
     user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
 
     if user == None:
-        user = User(hackerapi_id, email, name, phone, is_organizer)
+        user = User(hackerapi_id, email, name, is_organizer)
         db.session.add(user)
     else: 
         if name != '':
             user.name = name 
         user.email = email
-        if phone != '':
-            user.phone = phone 
         user.is_organizer = is_organizer
 
     db.session.commit()
