@@ -6,6 +6,8 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean)
     location = db.Column(db.String(120))
     name = db.Column(db.String())
+    first_name = db.Column(db.String())
+    last_name = db.Column(db.String())
     phone = db.Column(db.String(255))
     email = db.Column(db.String())
     notifications = db.Column(db.Boolean)

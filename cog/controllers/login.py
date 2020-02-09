@@ -50,13 +50,17 @@ def login_page():
 
     hackerapi_id = profile["id"]
 
-    name = profile.get("first_name", "") + " " + profile.get("last_name", "")
+    first_name = profile.get("first_name", "")
+    last_name = profile.get("last_name", "")
+    name = first_name + " " + last_name
     email = profile.get("email")
 
     user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
 
     if user == None:
-        user = User(hackerapi_id, email, name, is_organizer)
+        user = User(hackerapi_id, email, name, None, is_organizer)
+        user.first_name = first_name
+        user.last_name = last_name
         db.session.add(user)
     else: 
         if name != '':
