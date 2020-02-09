@@ -24,6 +24,9 @@
                     <a class="ui label" href="mailto:{{ u.email }}">
                         <i class="mail icon"></i> {{ u.email }}
                     </a>
+                    <a class="ui label" target="_blank" href="{{ "https://root.treehacks.com/api" | env_override('ENDPOINT_URL') }}/users/{{u.hackerapi_id}}/contact">
+                        <i class="slack icon"></i> Slack {{ u.first_name }}
+                    </a>
                     {% if u.phone %}
                         <a class="ui label" href="tel:{{ u.phone }}">
                             <i class="phone icon"></i> {{ u.phone }}
