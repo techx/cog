@@ -43,7 +43,7 @@ def login_page():
     profile, _ = get_profile_from_jwt(jwt)
     if not profile:
         return 'unauthorized jwt', 401
-    is_organizer = "admin" in profile.get("groups", [])
+    is_organizer = "admin" in profile.get("groups", []) or "hardware_admin" in profile.get("groups", [])
 
     if not is_organizer and profile.get("status") != "admission_confirmed":
         return 'user is not admin or ADMISSION_CONFIRMED status', 403
