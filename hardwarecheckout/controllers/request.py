@@ -1,5 +1,5 @@
 from hardwarecheckout import app
-# from hardwarecheckout import socketio
+from hardwarecheckout import socketio
 from hardwarecheckout.models import db
 from hardwarecheckout.config import EMAIL_SUBJECT
 from hardwarecheckout.models.request import Request, RequestStatus
@@ -8,9 +8,9 @@ from hardwarecheckout.models.inventory_entry import ItemType
 from hardwarecheckout.models.user import User
 from hardwarecheckout.models.item import Item
 from hardwarecheckout.models.request_item import RequestItem
-# from hardwarecheckout.models.socket import Socket
-from hardwarecheckout.tools.email import send_email
-from hardwarecheckout.tools.slack import send_slack
+from hardwarecheckout.models.socket import Socket
+
+
 from hardwarecheckout.utils import requires_auth, requires_admin, verify_token
 from sqlalchemy import event
 
@@ -19,7 +19,6 @@ from flask import (
     request,
     redirect,
     render_template,
-    render_template_string,
     jsonify
 )
 
@@ -39,6 +38,12 @@ def get_requests():
 @requires_auth()
 def request_submit():
     """Submits new request"""
+    if not (user.location and user.phone):	
+    return jsonify(	
+        success=False,	
+        message="""Please fill out your <a href='/user'>user info</a> before	
+            requesting items!"""	
+    )
     proposal = request.form.get('proposal', '')
     requested_quantity = int(request.form.get('quantity', 1))
 
@@ -151,20 +156,9 @@ def request_approve(id):
                     message='Out of stock!'
                 )
     request_update(id, RequestStatus.APPROVED)
-    ctx = {
-        "request_items": r.items,
-        "user": user
-    }
-    notification_sent = send_slack(user.email, render_template("messages/slack_message.html", **ctx)) or send_email(user.email, render_template_string(EMAIL_SUBJECT, **ctx), render_template("messages/email_message.html", **ctx))
-    if notification_sent:
-        return jsonify(
-            success=True
-        )
-    else:
-        return jsonify(
-            success=True,
-            message="Request was approved, but notification failed. You will need to manually notify the user."
-        )
+    return jsonify(
+        success=True,
+    )
 
 @app.route('/request/<int:id>/fulfill', methods=['POST'])
 @requires_admin()
@@ -220,51 +214,51 @@ def request_deny(id):
         success=True,
     )
 
-# @socketio.on('connect', namespace='/admin')
-# def authenticate_admin_conection():
-#     """Callback when client connects to /admin namespace, returns True
-#     if admin and False otherwise
-#     """
-#     if 'jwt' in request.cookies:
-#         hackerapi_id = verify_token(request.cookies['jwt'])
-#         if not hackerapi_id:
-#             return False
-#         user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
+@socketio.on('connect', namespace='/admin')
+def authenticate_admin_conection():
+    """Callback when client connects to /admin namespace, returns True
+    if admin and False otherwise
+    """
+    if 'jwt' in request.cookies:
+        quill_id = verify_token(request.cookies['jwt'])
+        if not quill_id:
+            return False
+        user = User.query.filter_by(quill_id=quill_id).first()
 
-#         if user == None or not user.is_admin:
-#             return False
+        if user == None or not user.is_admin:
+            return False
 
-#         return True
-#     else:
-#         return False
+        return True
+    else:
+        return False
 
-# @socketio.on('connect', namespace='/user')
-# def authenticate_user_conection():
-#     """Callback when client connects to /user namespace, returns True
-#     if logged in and False otherwise
-#     """
-#     if 'jwt' in request.cookies:
-#         hackerapi_id = verify_token(request.cookies['jwt'])
-#         if not hackerapi_id:
-#             return False
-#         user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
+@socketio.on('connect', namespace='/user')
+def authenticate_user_conection():
+    """Callback when client connects to /user namespace, returns True
+    if logged in and False otherwise
+    """
+    if 'jwt' in request.cookies:
+        quill_id = verify_token(request.cookies['jwt'])
+        if not quill_id:
+            return False
+        user = User.query.filter_by(quill_id=quill_id).first()
 
-#         if user == None:
-#             return False
+        if user == None:
+            return False
 
-#         socket = Socket(request.sid, user)
-#         db.session.add(socket)
-#         db.session.commit()
-#         return True
-#     else:
-#         return False
+        socket = Socket(request.sid, user)
+        db.session.add(socket)
+        db.session.commit()
+        return True
+    else:
+        return False
 
-# @socketio.on('disconnect', namespace='/user')
-# def user_disconnect():
-#     """Delete user's socket when they disconnect"""
-#     socket = Socket.query.get(request.sid)
-#     db.session.delete(socket)
-#     db.session.commit()
+@socketio.on('disconnect', namespace='/user')
+def user_disconnect():
+    """Delete user's socket when they disconnect"""
+    socket = Socket.query.get(request.sid)
+    db.session.delete(socket)
+    db.session.commit()
 
 def on_request_insert(mapper, connection, target):
     """Callback for when new request is inserted into DB"""
@@ -277,7 +271,7 @@ def on_request_update(mapper, connection, target):
 def request_change_handler(target):
     """Handler that sends updated HTML for rendering requests"""
     user = target.user
-    # sockets = Socket.query.filter_by(user=user).all()
+    sockets = Socket.query.filter_by(user=user).all()
 
     requests = Request.query.filter(Request.user == user, Request.status.in_(
         [RequestStatus.APPROVED, RequestStatus.SUBMITTED, RequestStatus.DENIED])).all()
@@ -288,10 +282,10 @@ def request_change_handler(target):
                         admin = False,
                         time = False)
 
-    # for socket in sockets:
-    #     socketio.emit('update', {
-    #         'requests': requests_html,
-    #     }, namespace='/user', room=socket.sid)
+    for socket in sockets:
+        socketio.emit('update', {
+            'requests': requests_html,
+        }, namespace='/user', room=socket.sid)
 
     # TODO: add check if at least one admin is connected
     approved_requests = render_template('includes/macros/display_requests.html',
@@ -320,11 +314,11 @@ def request_change_handler(target):
             }
         )
 
-    # socketio.emit('update', {
-    #     'approved_requests': approved_requests,
-    #     'submitted_requests': submitted_requests,
-    #     'lottery_quantities': lottery_quantities
-    # }, namespace='/admin')
+    socketio.emit('update', {
+        'approved_requests': approved_requests,
+        'submitted_requests': submitted_requests,
+        'lottery_quantities': lottery_quantities
+    }, namespace='/admin')
 
 # listeners for change to Request database
 event.listen(RequestItem, 'after_insert', on_request_insert)

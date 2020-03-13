@@ -11,7 +11,6 @@ class ItemType(enum.Enum):
     LOTTERY = 0
     CHECKOUT = 1
     FREE = 2
-    MLH = 3
 
 class InventoryEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -81,9 +80,5 @@ class InventoryEntry(db.Model):
     @property
     def requires_lottery(self):
         return self.item_type == ItemType.LOTTERY
-
-    @property
-    def requires_mlh(self):
-        return self.item_type == ItemType.MLH
 
     def __str__(self): return str(self.name) + " [" + str(self.id) + "]"

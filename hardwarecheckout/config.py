@@ -7,9 +7,12 @@ import os
 # Postgres SQL Connection String.
 # Note: This is the default env variable name
 # used for Heroku postgres deploys.
-DB_URI = os.environ['DATABASE_URL']
+DB_URI = os.environ['DATABASE_URL'] 
 
-# Random Secret for sessions
+# URL of Quill instance (for auth integration)
+QUILL_URL = os.environ['QUILL'] 
+
+# Random Secret for JWTs - must match Quill secret
 SECRET = os.environ['SECRET']
 
 
@@ -19,9 +22,6 @@ SECRET = os.environ['SECRET']
 ### for deploy configuration without modifying the codebase at all. 
   
 ## Deploy settings ##
-
-# HackerAPI event slug
-EVENT_SLUG = 'hackthenorth2019'
 
 # Enable/disable Flask debug mode. Should be set to 
 # False on production deploys of Cog. 
@@ -36,7 +36,7 @@ FORCE_SSL = False
 
 ## Metadata ## 
 
-HACKATHON_NAME = "Hack Better"
+HACKATHON_NAME = "HackMIT"
 
 ## Event logistical settings ##
 
@@ -71,29 +71,15 @@ DISPLAY_CHECKOUT_QUANTITY = True
 LOTTERY_MULTIPLE_SUBMISSIONS = False 
 
 # The info text underneath the 'Lottery Required' section 
-LOTTERY_TEXT = """We have a limited quantity of these items. 
-Please fill out a brief proposal describing your project idea by Friday at 10:30. 
-If you are randomly selected to hack on one of these items, we will call you to the desk by Slack message."""
+LOTTERY_TEXT = """We have a limited quantity of these items. Please fill out a 
+brief proposal describing your project idea, and we'll randomly accept as many 
+requests as we can 30 minutes after hacking starts."""
 
 # The info text underneath the 'Checkout Required' section 
-CHECKOUT_TEXT = """Click to request any of these items. 
-We will text you when your hardware is ready for pickup. 
-Keep in mind we will ask to hold on to a form of ID until the item is returned."""
+CHECKOUT_TEXT = """Click to request any of these items, and your request will
+be approved when we have one available. Keep in mind we will ask to hold on
+to a form of ID until the item is returned."""
 
 # The info text underneath the 'No Checkout Required' section 
-FREE_TEXT = """Pick these up from the tool shop at any time. 
-Please don't take more than you need, and return the items at the end of the event!"""
-
-## Email notification settings ##
-
-EMAIL_SENDER = 'hello@treehacks.com'
-EMAIL_SENDER_NAME = 'TreeHacks'
-SMTP_USERNAME = os.getenv('SMTP_USERNAME')
-SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
-SMTP_HOST = 'email-smtp.us-east-1.amazonaws.com'
-SMTP_PORT = 587
-EMAIL_SUBJECT = "TreeHacks - Your hardware checkout is ready"
-
-## Slack notification settings ##
-
-SLACK_OAUTH_ACCESS_TOKEN = os.getenv('SLACK_OAUTH_ACCESS_TOKEN')
+FREE_TEXT = """Just come to the hardware desk and ask for any of these
+items!"""

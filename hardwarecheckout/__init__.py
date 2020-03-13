@@ -1,40 +1,18 @@
 import pytz
 import os
-import random
-import string
 
-from flask import Flask, session, request, abort
-# from flask_socketio import SocketIO
+from flask import Flask
+from flask_socketio import SocketIO
 from urllib.parse import urlsplit
 from flaskext.markdown import Markdown
 
 from hardwarecheckout.utils import display_date, deltatimeformat
-# from hardwarecheckout.models.socket import Socket
+from hardwarecheckout.models.socket import Socket
 from flask_sslify import SSLify
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_POOL_SIZE'] = 2
-
 import hardwarecheckout.config as config
-
-
-app.secret_key = config.SECRET
-
-@app.before_request
-def csrf_protect():
-    if request.method == "POST":
-        token = session['_csrf_token']
-        if not token or (token != request.form.get('_csrf_token') and token != request.headers.get('x-csrftoken')):
-            abort(403)
-
-def generate_csrf_token():
-    if '_csrf_token' not in session:
-        # generate random CSRF token
-        session['_csrf_token'] = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
-    return session['_csrf_token']
-
-app.jinja_env.globals['csrf_token'] = generate_csrf_token
 
 def get_conf_bool(variable):
     val = os.environ.get(variable, getattr(config, variable))
@@ -61,6 +39,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 set_conf_str(app, 'HACKATHON_NAME')
 app.config['APP_NAME'] = app.config['HACKATHON_NAME'] + ' Hardware Checkout'
+app.config['QUILL_URL'] = config.QUILL_URL 
+app.config['QUILL_URL_READABLE'] = urlsplit(app.config['QUILL_URL']).netloc
 
 # Debug
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -93,15 +73,14 @@ Markdown(app)
 if get_conf_bool("FORCE_SSL"):
     SSLify(app)
 
-# socketio = SocketIO()
-# socketio.init_app(app)
+socketio = SocketIO()
+socketio.init_app(app)
 
 import hardwarecheckout.controllers # registers controllers
-import hardwarecheckout.filters
 
 # delete stale sockets from previous open sessions
 try: 
-    # Socket.query.delete()
+    Socket.query.delete()
     db.session.commit()
 except: 
     # exception if DB not yet initialized

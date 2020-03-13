@@ -43,42 +43,42 @@ def user_items(id):
             isme = is_me,
             items = target.items)
 
-# @app.route('/user/<int:id>/update', methods=['POST'])
-# @requires_auth()
-# def user_update(id):
-#     # update user settings
-#     if user.is_admin or user.id == id:
-#         user_to_change = User.query.get(id)
-#         form = UserUpdateForm(request.form)
-#         if form.validate(): 
-#             if form.location.data:
-#                 user_to_change.location = form.location.data
-#             if form.phone.data:
-#                 user_to_change.phone = form.phone.data.national_number
-#             if form.name.data:  
-#                 user_to_change.name = form.name.data
-#             db.session.commit()
-#             return jsonify(
-#                 success=True
-#             ) 
+@app.route('/user/<int:id>/update', methods=['POST'])
+@requires_auth()
+def user_update(id):
+    # update user settings
+    if user.is_admin or user.id == id:
+        user_to_change = User.query.get(id)
+        form = UserUpdateForm(request.form)
+        if form.validate(): 
+            if form.location.data:
+                user_to_change.location = form.location.data
+            if form.phone.data:
+                user_to_change.phone = form.phone.data.national_number
+            if form.name.data:  
+                user_to_change.name = form.name.data
+            db.session.commit()
+            return jsonify(
+                success=True
+            ) 
 
-#         error_msg = '\n'.join([key.title() + ': ' + ', '.join(value) for key, value in form.errors.items()])
+        error_msg = '\n'.join([key.title() + ': ' + ', '.join(value) for key, value in form.errors.items()])
 
-#         return jsonify(
-#             success=False,
-#             message=error_msg,
-#             user={
-#                 'phone': user_to_change.phone,
-#                 'name': user_to_change.name,
-#                 'location': user_to_change.location
-#             }
-#         )
+        return jsonify(
+            success=False,
+            message=error_msg,
+            user={
+                'phone': user_to_change.phone,
+                'name': user_to_change.name,
+                'location': user_to_change.location
+            }
+        )
 
-#     else:
-#         return jsonify(
-#             success=False,
-#             message='Forbidden'
-#         ), 403
+    else:
+        return jsonify(
+            success=False,
+            message='Forbidden'
+        ), 403
 
 @app.route('/users')
 @requires_admin()

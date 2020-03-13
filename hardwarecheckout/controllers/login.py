@@ -1,86 +1,68 @@
 from hardwarecheckout import app
-from hardwarecheckout.config import SECRET, EVENT_SLUG
+from hardwarecheckout import config
 from hardwarecheckout.models.user import * 
-from hardwarecheckout.utils import get_profile_from_jwt
+from hardwarecheckout.utils import verify_token
 import requests
 import datetime
 import json
-from urllib.parse import urljoin
+from urlparse import urljoin
+from hardwarecheckout.forms.login_form import LoginForm
 from flask import (
     redirect,
     render_template,
     request,
     url_for
 )
-import os
 
-def check_role(roles, role):
-    return any(
-        d['event_slug'] == EVENT_SLUG and 
-        d['role'] == role 
-        for d in roles
-    )
-
-def get_hacker(token, is_organizer):
-    if is_organizer == False:
-        req = requests.get('https://hackerapi.com/v2/events/hackthenorth2019/applications/me?token=' + token)
-        if req.ok:
-            r = json.loads(req.text)
-            return r
-    return dict()
-
-COOKIE_NAME = '__hackerapi-token-client-only__'
-
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login')
 def login_page():
-    if request.method == 'GET':
-        response = app.make_response(render_template('pages/login.html'))
+    """If not logged in render login page, otherwise redirect to inventory"""
+    if 'jwt' in request.cookies:
+        try:
+            decode_token(request.cookies['jwt'])
+            return redirect('/inventory')
+        except Exception as e:
+            pass
+        
+    return render_template('pages/login.html')
+
+@app.route('/login', methods=['POST'])
+def login_handler():
+    """Log user in"""
+    form = LoginForm(request.form)
+    if form.validate():
+        url = urljoin(config.QUILL_URL, '/auth/login')
+        r = requests.post(url, data={'email':request.form['email'], 'password':request.form['password']})
+        try: 
+            r = json.loads(r.text)
+        except ValueError as e:
+            return render_template('pages/login.html', error=[str(e)])
+        
+        if 'message' in r:
+            return render_template('pages/login.html', error=[r['message']])
+
+        quill_id = verify_token(r['token'])
+        if not quill_id:
+            return render_template('pages/login.html', error=['Invalid token returned by registration'])
+        
+        if User.query.filter_by(quill_id=quill_id).count() == 0: 
+            user = User(quill_id, request.form['email'], r['user']['admin'])
+            db.session.add(user)
+            db.session.commit()
+
+        response = app.make_response(redirect('/inventory'))
+        response.set_cookie('jwt', r['token'])
         return response
-    # POST
-
-    jwt = request.headers.get('Authorization')
-    # Attempt to grab the user details
-    profile, _ = get_profile_from_jwt(jwt)
-    if not profile:
-        return 'unauthorized jwt', 401
-    is_organizer = "admin" in profile.get("groups", []) or "hardware_admin" in profile.get("groups", [])
-
-    if not is_organizer and profile.get("status") != "admission_confirmed":
-        return 'user is not admin or ADMISSION_CONFIRMED status', 403
-
-    hackerapi_id = profile["id"]
-
-    first_name = profile.get("first_name", "")
-    last_name = profile.get("last_name", "")
-    name = first_name + " " + last_name
-    email = profile.get("email")
-
-    user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
-
-    if user == None:
-        user = User(hackerapi_id, email, name, None, is_organizer)
-        user.first_name = first_name
-        user.last_name = last_name
-        db.session.add(user)
-    else: 
-        if name != '':
-            user.name = name 
-        user.email = email
-        user.is_organizer = is_organizer
-
-    db.session.commit()
-
-    response = app.make_response("")
-    response.set_cookie('jwt', jwt)
-    return response
     
-    # Send user to error page.
-    # response = app.make_response(render_template('pages/login.html?error=1'))
-    # return response
-    
+    errors = []
+    for field, error in form.errors.items():
+        errors.append(field + ": " + "\n".join(error) + "\n")
+
+    return render_template('pages/login.html', error=errors)
 
 @app.route('/logout')
 def logout():
     """Log user out"""
-    response = app.make_response(redirect(os.getenv("LOGIN_URL") + "/logout"))
+    response = app.make_response(redirect('/'))
+    response.set_cookie('jwt', '')
     return response
