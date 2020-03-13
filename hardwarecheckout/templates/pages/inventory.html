@@ -54,18 +54,6 @@
 <div class="ui stackable two column grid">
     <div class="row">
         <div class="eleven wide column" id="inventory">
-            <div class="ui info message">
-                <div class="header">
-                    Instructions
-                </div>
-                <p>
-                    <ol style="padding-left: 12px;">
-                        <li> Request the <b> checkout required </b> hardware items you want to borrow. We will send you a Slack message when your hardware is ready for pickup, so you can wait at your hacking spot.</li>
-                        <li>Apply for any <b> lottery </b> items you would like to hack on. We will start running the lotteries on Friday at 10:30 PM, and will text you if you get the chance to hack on these items.</li>
-                        <li>Pick up <b>no checkout required</b> items at any time from the hardware lab.</li>
-                    </ol>
-                </p>
-            </div>
             {% if lottery_items %}
                 <h2>Lottery Required</h2>
                 <span> {{ config['LOTTERY_TEXT'] }} </span>
@@ -86,34 +74,20 @@
 
                 {{ accordion_list(free_items, "free_accordion") }}
             {% endif %}
-
-            {% if mlh_items %}
-                <h2>MLH Items</h2>
-                <span> {{ config['MLH_TEXT'] }} </span>
-
-                {{ accordion_list(mlh_items, "mlh_accordion") }}
-            {% endif %}
         </div>
-        <div class="five wide column" id="inventory-requests">
-            <div class="ui">
-                <h2>My Requests</h2>
-                <div id="my_requests">
-                    {{ display_requests(requests, RequestStatus, admin=False, time=False) }}
-                </div>
+        <div class="five wide column">
+            <div class="ui sticky">
+            <h2>My Requests</h2>
+            <div id="my_requests">
+                {{ display_requests(requests, RequestStatus, admin=False, time=False) }}
             </div>
-        </div>
-        <div id="inventory-requests-prompt">
-            <span><span id="inventory-requests-count"></span> requested items</span>
-            <button class="ui button tiny primary" id="inventory-requests-toggle">
-                <i class="icon chevron up"></i>
-                <i class="icon chevron down"></i>
-            </button>
+            </div>
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block script %}
-<script type="text/javascript" src="{{ url_for('static', filename='vendor/socket.io.min.js') }}"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
     <script src="{{ url_for('static', filename='scripts/inventory.js') }}"></script>
 {% endblock %}

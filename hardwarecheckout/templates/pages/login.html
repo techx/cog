@@ -2,57 +2,29 @@
 {% block title %} Login {% endblock %}
 
 {% block content %}
-<div class="ui middle aligned center aligned grid">
+<div class="ui middle aligned center aligned grid"> 
     <div id="login-wrapper" class="ui segment column">
         <h2 class="ui header"> {{ config["HACKATHON_NAME"] }} Hardware </h2>
-        <span id="message">Please wait...</span>
+        <span> Please login using your <a href="{{ config["QUILL_URL"] }}">{{ config["QUILL_URL_READABLE"] }}</a> credentials </span>
+        <form id="login-form" class="ui form" action='/login' method='POST'>
+            <div class="field">
+                <label>Email</label> 
+                <input type="text" name="email" placeholder="alyssap@hacker.org" autofocus>
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="**********"> 
+            </div>
+            <input class="ui fluid primary submit button" type="submit" value="Login">
+        </form>
+        {% if error %}
+            <div class="ui error message">Login Errors:
+                {% for item in error %}
+                <div>{{item}}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
 
-{% block end %}
-<script type="application/json"
-    id="treehacks-login-url">{{ "https://login.treehacks.com" | env_override('LOGIN_URL') }}</script>
-<script type="application/json" id="treehacks-csrf-token">{{ csrf_token() }}</script>
-<script>
-    (function () {
-        // From https://github.com/youbastard/jquery.getQueryParameters/blob/master/qp.js
-        var getQueryParameters = function(str) {
-            return (str || document.location.search).replace(/(^\?)/,'').split("&").map(function(n){return n=n.split("="),this[n[0]]=n[1],this;}.bind({}))[0];
-        };
-        $(function () {
-            function login() {
-                window.location.href = LOGIN_URL + "?redirect=" + window.location.href;
-            }
-            var LOGIN_URL = document.getElementById("treehacks-login-url").innerHTML;
-            var CSRF_TOKEN = document.getElementById("treehacks-csrf-token").innerHTML;
-            var query = getQueryParameters();
-            if (query && query.error === "1") {
-                $("#message").html("Sorry, there was an error.");
-                return;
-            }
-            var hash = getQueryParameters(window.location.hash.substring(1)); // remove starting # from hash
-            if (hash && hash.jwt) {
-                window.location.hash = "";
-                $("#message").html("Loading...");
-                $.ajax({
-                    type: "POST",
-                    url: "",
-                    headers: {
-                        Authorization: hash.jwt,
-                        'x-csrftoken': CSRF_TOKEN
-                    },
-                    error: function () {
-                        $("#message").html("Sorry, there was an error.");
-                    },
-                    success: function () {
-                        window.location.href = "/inventory";
-                    }
-                });
-            } else {
-                login();
-            }
-        });
-    })();
-</script>
-{% endblock %}

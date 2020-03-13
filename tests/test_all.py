@@ -41,12 +41,12 @@ def app():
 
 @pytest.fixture
 def user(app):
-    hackerapi_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
-    token = jws.sign(hackerapi_id, SECRET, algorithm='HS256')
-    user = User(hackerapi_id, 'alyssap@hacker.org', False)
+    quill_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
+    token = jws.sign(quill_id, SECRET, algorithm='HS256')
+    user = User(quill_id, 'alyssap@hacker.org', False)
     db.session.add(user)
     db.session.commit()
-    app.set_cookie('localhost:80', 'jwt', token) 
+    app.set_cookie('localhost:8000', 'jwt', token) 
 
     return user
 
@@ -75,16 +75,16 @@ def test_home(app):
         assert len(context['checkout_items']) == 0
         assert len(context['free_items']) == 0
 
-def test_hackerapi_login(app):
+def test_quill_login(app):
     with captured_templates(hardwarecheckout.app) as templates:
-        rv = hackerapi_login(app, 'admin@example.com', 'party')
+        rv = quill_login(app, 'admin@example.com', 'party')
         assert rv.status_code == 200
         assert len(templates) == 1
         template, context = templates[0]
         assert template.name == 'pages/inventory.html'
 
     with captured_templates(hardwarecheckout.app) as templates:
-       rv = hackerapi_login(app, 'admin@example.com', 'prty')
+       rv = quill_login(app, 'admin@example.com', 'prty')
        assert rv.status_code == 200
        assert len(templates) == 1
        template, context = templates[0]
@@ -92,7 +92,7 @@ def test_hackerapi_login(app):
        assert "That's not the right password." in context['error']
 
     with captured_templates(hardwarecheckout.app) as templates:
-       rv = hackerapi_login(app, 'admin@example.co', 'party')
+       rv = quill_login(app, 'admin@example.co', 'party')
        assert rv.status_code == 200
        assert len(templates) == 1
        template, context = templates[0]

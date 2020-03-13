@@ -1,6 +1,6 @@
 FROM python:3.6.3
 
-ARG APP_PATH=/hardwarecheckout
+ARG APP_PATH=/hardware-checkout
 
 WORKDIR $APP_PATH
 

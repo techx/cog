@@ -23,7 +23,18 @@
 <form method="post" class="ui form">
     <div class="four fields">
         <div class="three wide field">
-            <input type="text" name="name" disabled placeholder="Name" value="{{ target.name }}">
+            <input type="text" name="name" placeholder="Name" value="{{ target.name }}">
+        </div>
+        <div class="three wide field">
+            <input type="text" name="location" placeholder="Table Number" value="{{ target.location }}">
+        </div>
+        <div class="five wide field">
+            <input type="text" name="phone" placeholder="Phone Number" value="{{ target.phone }}">
+        </div>
+        <div class="four wide field">
+            <button class="ui primary update-user button" data-id="{{ target.id }}" type="submit">
+               Update 
+            </button>
         </div>
     </div>
     <div class="ui error message"></div>

@@ -2,7 +2,6 @@ import uuid
 from jose import jws
 from jose.exceptions import JWSError
 import os
-import requests
 from hardwarecheckout.config import *
 from hardwarecheckout.constants import *
 from hardwarecheckout.models.user import *
@@ -12,11 +11,11 @@ from datetime import datetime
 from babel import dates
 
 def gen_uuid():
-    return str(uuid.uuid4()).replace('-', '')
+    return str(uuid.uuid4()).replace('-', '').decode('utf-8')
 
 def verify_token(token):
     try:
-        return jws.verify(token, SECRET, algorithms=['HS256']).decode('utf-8')
+        return jws.verify(token, SECRET, algorithms=['HS256'])
     except JWSError:
         return None 
 
@@ -29,24 +28,15 @@ def safe_redirect(endpoint, request):
         ), 401
     return redirect(url_for(endpoint))
 
-def get_profile_from_jwt(jwt):
-    try:
-        r = requests.get(os.getenv("ENDPOINT_URL") + "/user_profile", headers={"Authorization": jwt})
-        profile = r.json()
-        return profile, profile["id"]
-    except Exception as e:
-        print(e)
-        return None, None
-
 def requires_auth():
     def decorator(f):
         @wraps(f)
         def decorated(*args, **kwargs):
             if 'jwt' in request.cookies:
-                profile, hackerapi_id = get_profile_from_jwt(request.cookies['jwt'])
-                if not hackerapi_id:
+                quill_id = verify_token(request.cookies['jwt'])
+                if not quill_id:
                     return safe_redirect('login_page', request)
-                user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
+                user = User.query.filter_by(quill_id=quill_id).first()
          
                 # if no user found for auth token, log them out (clears token)
                 if user == None:
@@ -65,12 +55,12 @@ def auth_optional():
         @wraps(f)
         def decorated(*args, **kwargs):
             if 'jwt' in request.cookies:
-                profile, hackerapi_id = get_profile_from_jwt(request.cookies['jwt'])
-                if not hackerapi_id:
+                quill_id = verify_token(request.cookies['jwt'])
+                if not quill_id:
                     f.__globals__['user'] = None 
                     return f(*args, **kwargs)
 
-                user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
+                user = User.query.filter_by(quill_id=quill_id).first()
 
                 # if no user found for auth token, log them out (clears token)
                 if user == None:
@@ -90,10 +80,10 @@ def requires_admin():
         @wraps(f)
         def decorated(*args, **kwargs):
             if 'jwt' in request.cookies:
-                profile, hackerapi_id = get_profile_from_jwt(request.cookies['jwt'])
-                if not hackerapi_id:
+                quill_id = verify_token(request.cookies['jwt'])
+                if not quill_id:
                     return safe_redirect('login_page', request)
-                user = User.query.filter_by(hackerapi_id=hackerapi_id).first()
+                user = User.query.filter_by(quill_id=quill_id).first()
 
                 # if no user found for auth token, log them out (clears token)
                 if user == None:
