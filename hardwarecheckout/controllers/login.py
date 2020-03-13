@@ -1,7 +1,7 @@
-from cog import app
-from cog.config import SECRET, EVENT_SLUG
-from cog.models.user import * 
-from cog.utils import get_profile_from_jwt
+from hardwarecheckout import app
+from hardwarecheckout.config import SECRET, EVENT_SLUG
+from hardwarecheckout.models.user import * 
+from hardwarecheckout.utils import get_profile_from_jwt
 import requests
 import datetime
 import json

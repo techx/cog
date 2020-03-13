@@ -1,4 +1,4 @@
-from cog.models import db
+from hardwarecheckout.models import db
 
 class RequestItem(db.Model):
     entry_id = db.Column(db.Integer, db.ForeignKey('inventory_entry.id'), primary_key=True)

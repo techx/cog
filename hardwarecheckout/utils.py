@@ -3,9 +3,9 @@ from jose import jws
 from jose.exceptions import JWSError
 import os
 import requests
-from cog.config import *
-from cog.constants import *
-from cog.models.user import *
+from hardwarecheckout.config import *
+from hardwarecheckout.constants import *
+from hardwarecheckout.models.user import *
 from flask import (redirect, request, jsonify, url_for)
 from functools import wraps
 from datetime import datetime

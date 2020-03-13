@@ -1,6 +1,6 @@
 
 def rebuild():
-    from cog.models import db
+    from hardwarecheckout.models import db
     db.reflect()
     db.drop_all()
     db.create_all()

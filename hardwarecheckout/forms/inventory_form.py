@@ -1,6 +1,6 @@
 from wtforms import Form, StringField, BooleanField, IntegerField, SelectField, validators
-from cog.forms.inventory_update_form import InventoryUpdateForm
-from cog.models.inventory_entry import ItemType
+from hardwarecheckout.forms.inventory_update_form import InventoryUpdateForm
+from hardwarecheckout.models.inventory_entry import ItemType
 
 def validate_quantity(form, field):
     return field.data != None or form.item_type == ItemType.FREE or form.item_type == ItemType.MLH

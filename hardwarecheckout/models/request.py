@@ -1,6 +1,6 @@
-from cog.models import db
-from cog.models.user import User
-from cog.models.inventory_entry import ItemType
+from hardwarecheckout.models import db
+from hardwarecheckout.models.user import User
+from hardwarecheckout.models.inventory_entry import ItemType
 from datetime import datetime
 import enum
 

@@ -1,4 +1,4 @@
-from cog.models import db
+from hardwarecheckout.models import db
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)

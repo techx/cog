@@ -1,22 +1,22 @@
-from cog import app
-from cog.models import db
+from hardwarecheckout import app
+from hardwarecheckout.models import db
 
-from cog.controllers.request import request_update
+from hardwarecheckout.controllers.request import request_update
 
-from cog.models.item import Item
-from cog.models.inventory_entry import InventoryEntry
-from cog.models.inventory_entry import ItemType
-from cog.models.user import User
-from cog.models.request import Request, RequestStatus
-from cog.models.request_item import RequestItem
+from hardwarecheckout.models.item import Item
+from hardwarecheckout.models.inventory_entry import InventoryEntry
+from hardwarecheckout.models.inventory_entry import ItemType
+from hardwarecheckout.models.user import User
+from hardwarecheckout.models.request import Request, RequestStatus
+from hardwarecheckout.models.request_item import RequestItem
 
-from cog.forms.inventory_form import InventoryForm
-from cog.forms.inventory_update_form import InventoryUpdateForm
-from cog.forms.inventory_import_form import InventoryImportForm
+from hardwarecheckout.forms.inventory_form import InventoryForm
+from hardwarecheckout.forms.inventory_update_form import InventoryUpdateForm
+from hardwarecheckout.forms.inventory_import_form import InventoryImportForm
 
-from cog.utils import requires_auth, requires_admin, auth_optional
+from hardwarecheckout.utils import requires_auth, requires_admin, auth_optional
 
-from cog.sheets_csv import get_csv, SheetsImportError
+from hardwarecheckout.sheets_csv import get_csv, SheetsImportError
 
 from flask import jsonify
 from werkzeug.datastructures import MultiDict

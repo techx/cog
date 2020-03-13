@@ -1,10 +1,10 @@
-from cog.models import db
+from hardwarecheckout.models import db
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.sql import func
 
-from cog.models.item import Item
-from cog.models.request_item import RequestItem
-import cog.models.request 
+from hardwarecheckout.models.item import Item
+from hardwarecheckout.models.request_item import RequestItem
+import hardwarecheckout.models.request 
 import enum
 
 class ItemType(enum.Enum):
@@ -58,8 +58,8 @@ class InventoryEntry(db.Model):
         """Returns quantity of items that have not been 'claimed' by a request"""
         requests = RequestItem.query \
                     .filter_by(entry_id=self.id) \
-                    .join(cog.models.request.Request) \
-                    .filter_by(status=cog.models.request.RequestStatus.APPROVED) \
+                    .join(hardwarecheckout.models.request.Request) \
+                    .filter_by(status=hardwarecheckout.models.request.RequestStatus.APPROVED) \
                     .with_entities(func.sum(RequestItem.quantity)).scalar()
         if not requests: requests = 0
 
@@ -70,8 +70,8 @@ class InventoryEntry(db.Model):
         """Returns number of submitted requests for this entry"""
         requests = RequestItem.query \
             .filter_by(entry_id=self.id) \
-            .join(cog.models.request.Request) \
-            .filter_by(status=cog.models.request.RequestStatus.SUBMITTED).count()
+            .join(hardwarecheckout.models.request.Request) \
+            .filter_by(status=hardwarecheckout.models.request.RequestStatus.SUBMITTED).count()
         return requests
 
     @property

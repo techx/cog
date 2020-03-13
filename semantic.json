@@ -1,5 +1,5 @@
 {
-  "base": "cog/static/vendor/semantic/",
+  "base": "hardwarecheckout/static/vendor/semantic/",
   "paths": {
     "source": {
       "config": "src/theme.config",

@@ -1,5 +1,5 @@
 from wtforms import Form, StringField, BooleanField, IntegerField, SelectField, validators
-from cog.models.inventory_entry import ItemType
+from hardwarecheckout.models.inventory_entry import ItemType
 
 def validate_image(form, field):
     if field.data == field.default:

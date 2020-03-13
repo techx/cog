@@ -6,9 +6,9 @@ services:
       - 5432
     environment:
       - PG_PASSWORD=password
-  cog:
-    container_name: cog
-    image: cog:latest
+  hardwarecheckout:
+    container_name: hardwarecheckout
+    image: hardwarecheckout:latest
     build:
       context: .
     environment:
@@ -26,4 +26,4 @@ services:
     depends_on:
       - dev_db
     volumes:
-      - .:/cog
+      - .:/hardwarecheckout

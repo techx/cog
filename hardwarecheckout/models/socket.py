@@ -1,4 +1,4 @@
-from cog.models import db
+from hardwarecheckout.models import db
 
 class Socket(db.Model):
     sid = db.Column(db.String(), primary_key=True)

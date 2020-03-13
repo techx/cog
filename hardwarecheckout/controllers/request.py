@@ -1,17 +1,17 @@
-from cog import app
-# from cog import socketio
-from cog.models import db
-from cog.config import EMAIL_SUBJECT
-from cog.models.request import Request, RequestStatus
-from cog.models.inventory_entry import InventoryEntry
-from cog.models.inventory_entry import ItemType
-from cog.models.user import User
-from cog.models.item import Item
-from cog.models.request_item import RequestItem
-# from cog.models.socket import Socket
-from cog.tools.email import send_email
-from cog.tools.slack import send_slack
-from cog.utils import requires_auth, requires_admin, verify_token
+from hardwarecheckout import app
+# from hardwarecheckout import socketio
+from hardwarecheckout.models import db
+from hardwarecheckout.config import EMAIL_SUBJECT
+from hardwarecheckout.models.request import Request, RequestStatus
+from hardwarecheckout.models.inventory_entry import InventoryEntry
+from hardwarecheckout.models.inventory_entry import ItemType
+from hardwarecheckout.models.user import User
+from hardwarecheckout.models.item import Item
+from hardwarecheckout.models.request_item import RequestItem
+# from hardwarecheckout.models.socket import Socket
+from hardwarecheckout.tools.email import send_email
+from hardwarecheckout.tools.slack import send_slack
+from hardwarecheckout.utils import requires_auth, requires_admin, verify_token
 from sqlalchemy import event
 
 from flask import (

@@ -1,4 +1,4 @@
-from cog import app# , socketio
+from hardwarecheckout import app# , socketio
 from initialize import rebuild 
 import sys
 import os

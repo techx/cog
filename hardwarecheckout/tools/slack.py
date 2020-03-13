@@ -1,6 +1,6 @@
 import slack
 
-from cog.config import SLACK_OAUTH_ACCESS_TOKEN
+from hardwarecheckout.config import SLACK_OAUTH_ACCESS_TOKEN
 
 client = slack.WebClient(token=SLACK_OAUTH_ACCESS_TOKEN)
 

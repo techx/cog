@@ -3,7 +3,7 @@ import email.utils
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import html2text
-from cog.config import EMAIL_SENDER, EMAIL_SENDER_NAME, SMTP_USERNAME, SMTP_PASSWORD, SMTP_HOST, SMTP_PORT
+from hardwarecheckout.config import EMAIL_SENDER, EMAIL_SENDER_NAME, SMTP_USERNAME, SMTP_PASSWORD, SMTP_HOST, SMTP_PORT
 
 def send_email(recipient, subject, body):
     """

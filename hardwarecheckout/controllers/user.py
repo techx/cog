@@ -1,13 +1,13 @@
-from cog import app
+from hardwarecheckout import app
 
 import os
 
-from cog.utils import requires_auth, requires_admin
-from cog.models.user import User
-from cog.models.request import Request, RequestStatus
-from cog.models import db
+from hardwarecheckout.utils import requires_auth, requires_admin
+from hardwarecheckout.models.user import User
+from hardwarecheckout.models.request import Request, RequestStatus
+from hardwarecheckout.models import db
 
-from cog.forms.user_update_form import UserUpdateForm
+from hardwarecheckout.forms.user_update_form import UserUpdateForm
 
 from flask import (
     jsonify,

@@ -8,15 +8,15 @@ from flask import Flask, session, request, abort
 from urllib.parse import urlsplit
 from flaskext.markdown import Markdown
 
-from cog.utils import display_date, deltatimeformat
-# from cog.models.socket import Socket
+from hardwarecheckout.utils import display_date, deltatimeformat
+# from hardwarecheckout.models.socket import Socket
 from flask_sslify import SSLify
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_POOL_SIZE'] = 2
 
-import cog.config as config
+import hardwarecheckout.config as config
 
 
 app.secret_key = config.SECRET
@@ -84,7 +84,7 @@ set_conf_str(app, 'FREE_TEXT')
 set_conf_str(app, 'MLH_TEXT')
 set_conf_int(app, 'LOTTERY_CHAR_LIMIT')
 
-from cog.models import db
+from hardwarecheckout.models import db
 db.app = app
 db.init_app(app)
 
@@ -97,8 +97,8 @@ if get_conf_bool("FORCE_SSL"):
 # socketio = SocketIO()
 # socketio.init_app(app)
 
-import cog.controllers # registers controllers
-import cog.filters
+import hardwarecheckout.controllers # registers controllers
+import hardwarecheckout.filters
 
 # delete stale sockets from previous open sessions
 try: 

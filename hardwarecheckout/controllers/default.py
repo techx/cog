@@ -1,4 +1,4 @@
-from cog import app
+from hardwarecheckout import app
 
 import os
 
@@ -8,7 +8,7 @@ from flask import (
     redirect,
     render_template
 )
-from cog.utils import requires_auth
+from hardwarecheckout.utils import requires_auth
 
 @app.route('/favicon.ico')
 def favicon():
