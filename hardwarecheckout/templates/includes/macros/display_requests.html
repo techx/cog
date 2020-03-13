@@ -73,9 +73,6 @@
                     {% if request.status == RequestStatus.SUBMITTED %}
                         <span class="ui label">Submitted</span>
                     {% endif %}
-                    {% if request.status == RequestStatus.RETURNED %}
-                        <span class="ui label blue">Returned</span>
-                    {% endif %}
                     {% if request.status == RequestStatus.APPROVED %}
                         <span class="ui label green">Approved</span>
                     {% endif %}

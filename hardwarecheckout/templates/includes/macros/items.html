@@ -1,5 +1,4 @@
 {% macro items_list(items, table_id=1, editable=True, admin=False) -%}
-{% from 'includes/macros/confirmation.html' import confirmation %}
 <table class="ui compact table" data-table-id="{{ table_id }}"> 
 {% for item in items %}
     <tr>
@@ -39,9 +38,6 @@
 <form class="ui form">
     <span data-table-id="{{table_id}}" class="ui error message"></span>
 </form>
-
-{{ confirmation("return-notice", "Be sure to return ID to user!", "They've returned their last item", True, None, "return-notice-btn") }}
-
 {%- endmacro %}
 
 <!-- Allows this file to be rendered on its own -->

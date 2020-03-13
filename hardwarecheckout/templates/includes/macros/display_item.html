@@ -6,10 +6,10 @@
 {% else %}
 {% set count = item.quantity %}
 {% endif %}
-<div class="row inventory-item">
+<div class="row" >
     <div class="ten wide column">
         <div class="ui items">
-            <div class="item inventory-item-content">
+            <div class="item">
                 <div class="ui tiny image">
                     {% if admin and not item.is_visible %}
                         <div class="ui inverted active dimmer">
@@ -57,21 +57,10 @@
                 <div> <strong>Quantity:</strong> {{ count }} </div> 
                 <br>
             {% endif %}
-            {% if item.requires_mlh %}
-                <br>
-                <br>
-                <a href="https://hardware.mlh.io" target="_blank" class="ui primary button">Find on MLH</a>
-            {% endif %}
             {% if item.requires_checkout and not item.requires_lottery %}
             <form class="form request-form"  method="post">
                 <div class="ui action input">
-                    <select name="quantity" value="1" class="ui select">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
+                    <input type="number" name="quantity" value="1" min="1" max="5">
                     <button data-item-id="{{ item.id }}" type="submit" class="ui primary submit button">
                     {% if count > 0 %}
                         Request Now                            
@@ -86,13 +75,7 @@
             <form class="form request-form" method="post">
                 <div class="ui action input">
                     {% if config['LOTTERY_MULTIPLE_SUBMISSIONS'] %}
-                        <select name="quantity" value="1" class="ui select">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
+                        <input type="number" name="quantity" value="1" min="1" max="5"> 
                         <button type="submit" data-item-id="{{ item.id }}" 
                             class="ui primary submit button">Submit</button>
                     {% else %}
