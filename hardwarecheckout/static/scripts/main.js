@@ -4,9 +4,3 @@ $.fn.filterByData = function(prop, val) {
         function() { return $(this).data(prop)==val; }
     );
 }
-
-$(function() {
-    $('#toggle-mobile').click(() => {
-        $('#primary-menu').toggleClass('visible');
-    });
-});

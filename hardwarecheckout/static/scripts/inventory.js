@@ -2,18 +2,12 @@ function init_request_actions() {
     $('.request-action').api({
         method: 'POST',
         onSuccess: function(response) {
-            if (response.message) {
-                alert(message);
-            }
-            window.location.reload();
         },
         onFailure: function(err) {
             console.log(err);
-            alert(err.message);
-            window.location.reload();
+            alert(err.message)
         }
     });
-    $('#inventory-requests-count').text($('#my_requests tbody>tr').length);
 }
 
 $(document).ready(function() {
@@ -112,9 +106,6 @@ $(document).ready(function() {
             settings.data.item_id = $(this).data('item-id');
             return settings;
         },
-        onSuccess: function(response) {
-            window.location.reload();
-        },
         onError: function(error, element, xhr) {
             // handle redirects
             var json = xhr.responseJSON;
@@ -145,24 +136,19 @@ $(document).ready(function() {
 
     $('select.dropdown').dropdown();
 
-    $('#inventory-requests-toggle').click(() => {
-        $('#inventory-requests-toggle, #inventory-requests').toggleClass('visible');
+    var socket = io.connect(location.protocol + '//' + document.domain + ':' 
+        + location.port + '/user');
+    socket.on('connect', function() {
+        console.log('Socket connected!')
+        socket.emit('', {data: 'I\'m connected!'});
     });
-
-    // var socket = io.connect(location.protocol + '//' + document.domain + ':' 
-    //     + location.port + '/user');
-    // socket.on('connect', function() {
-    //     console.log('Socket connected!')
-    //     socket.emit('', {data: 'I\'m connected!'});
-    // });
     
-    // socket.on('update', function(data) {
-    //     if (data.requests) {
-    //         $('#my_requests').fadeOut(100, function() {
-    //             $(this).html(data.requests)
-    //                 .fadeIn(100, init_request_actions);
-    //             $('#inventory-requests-count').text($('#my_requests tbody>tr').length);
-    //         });
-    //     }
-    // });
+    socket.on('update', function(data) {
+        if (data.requests) {
+            $('#my_requests').fadeOut(100, function() {
+                $(this).html(data.requests)
+                    .fadeIn(100, init_request_actions);
+            });
+        }
+    });
 });
