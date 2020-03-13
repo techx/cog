@@ -19,3 +19,6 @@ logs:
 migrate:
 	docker-compose run hardwarecheckout python initialize.py
 	# db/containers still running
+
+test:
+	docker-compose run hardwarecheckout python initialize.py && python -m pytest tests/
