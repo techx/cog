@@ -46,7 +46,7 @@ def user(app):
     user = User(quill_id, 'alyssap@hacker.org', False)
     db.session.add(user)
     db.session.commit()
-    app.set_cookie('localhost:8000', 'jwt', token) 
+    app.set_cookie('localhost:5000', 'jwt', token) 
 
     return user
 

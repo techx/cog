@@ -12,17 +12,12 @@ services:
     build:
       context: .
     environment:
-      - LOGIN_URL=${LOGIN_URL}
-      - ENDPOINT_URL=${ENDPOINT_URL}
+      - QUILL=${QUILL}
       - DATABASE_URL=${DATABASE_URL}
       - SECRET=${SECRET}
-      - SLACK_OAUTH_ACCESS_TOKEN=${SLACK_OAUTH_ACCESS_TOKEN}
-      - SMTP_USERNAME=${SMTP_USERNAME}
-      - SMTP_PASSWORD=${SMTP_PASSWORD}
-      - FLASK_DEBUG=1
-      - PORT=8000
+      - PORT=5000
     ports:
-      - 127.0.0.1:8000:8000
+      - 127.0.0.1:5000:5000
     depends_on:
       - dev_db
     volumes:
