@@ -1,7 +1,24 @@
+build:
+	docker-compose build
+
+sass:
+	cd hardwarecheckout/static && sass --watch sass/app.scss:css/app.css
+start:
+	docker-compose up -d
+	@echo "hardwarecheckout listening on port 8000, postgres on 5432"
+	@echo "run 'make logs' to watch logs"
+
+stop:
+	docker-compose down
+
+# watch the logs from hardwarecheckout
+logs:
+	docker-compose logs -f -t hardwarecheckout 
+
+# run all the migrations
+migrate:
+	docker-compose run hardwarecheckout python initialize.py
+	# db/containers still running
+
 test:
-	python -m pytest tests/
-
-PORT = 8000
-run:
-	gunicorn --bind 0.0.0.0:$(PORT) -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker hardwarecheckout:app 
-
+	docker-compose run hardwarecheckout python initialize.py && python -m pytest tests/

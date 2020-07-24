@@ -42,7 +42,7 @@ class InventoryEntry(db.Model):
         self.image_src = image
 
         self.items = []
-        for i in xrange(int(qty)):
+        for i in range(int(qty)):
             self.items.append(
                     Item(self, self.name + " " + str(i+1)))
 
@@ -61,6 +61,7 @@ class InventoryEntry(db.Model):
                     .filter_by(status=hardwarecheckout.models.request.RequestStatus.APPROVED) \
                     .with_entities(func.sum(RequestItem.quantity)).scalar()
         if not requests: requests = 0
+
         return Item.query.filter_by(entry_id = self.id, user = None).count() - requests
 
     @property

@@ -11,7 +11,7 @@ from datetime import datetime
 from babel import dates
 
 def gen_uuid():
-    return str(uuid.uuid4()).replace('-', '')
+    return str(uuid.uuid4()).replace('-', '').decode('utf-8')
 
 def verify_token(token):
     try:

@@ -1,7 +1,7 @@
 from hardwarecheckout import app
 from hardwarecheckout import socketio
 from hardwarecheckout.models import db
-
+from hardwarecheckout.config import EMAIL_SUBJECT
 from hardwarecheckout.models.request import Request, RequestStatus
 from hardwarecheckout.models.inventory_entry import InventoryEntry
 from hardwarecheckout.models.inventory_entry import ItemType
@@ -9,6 +9,7 @@ from hardwarecheckout.models.user import User
 from hardwarecheckout.models.item import Item
 from hardwarecheckout.models.request_item import RequestItem
 from hardwarecheckout.models.socket import Socket
+
 
 from hardwarecheckout.utils import requires_auth, requires_admin, verify_token
 from sqlalchemy import event
@@ -38,10 +39,10 @@ def get_requests():
 def request_submit():
     """Submits new request"""
     if not (user.location and user.phone):
-        return jsonify(
-            success=False,
-            message="""Please fill out your <a href='/user'>user info</a> before
-                requesting items!"""
+        return jsonify(	
+            success=False,	
+            message="""Please fill out your <a href='/user'>user info</a> before	
+                requesting items!"""	
         )
     proposal = request.form.get('proposal', '')
     requested_quantity = int(request.form.get('quantity', 1))
@@ -91,7 +92,7 @@ def request_submit():
                 message='Out of stock!'
             )
 
-    for _ in xrange(requested_quantity):
+    for _ in range(requested_quantity):
         item = RequestItem(
             InventoryEntry.query.get(request.form['item_id']),
             1)
@@ -148,7 +149,7 @@ def request_approve(id):
         quantity = request_item.quantity
 
         # get items of proper type
-        for _ in xrange(quantity):
+        for _ in range(quantity):
             if entry.quantity < quantity:
                 return jsonify(
                     success=False,
@@ -184,7 +185,7 @@ def request_fulfill(id):
         quantity = request_item.quantity
 
         # get items of proper type
-        for _ in xrange(quantity):
+        for _ in range(quantity):
             item = Item.query.filter_by(entry_id = entry.id, user = None).first()
             if item == None:
                 return jsonify(

@@ -3,7 +3,7 @@ import os
 
 from flask import Flask
 from flask_socketio import SocketIO
-from urlparse import urlsplit
+from urllib.parse import urlsplit
 from flaskext.markdown import Markdown
 
 from hardwarecheckout.utils import display_date, deltatimeformat

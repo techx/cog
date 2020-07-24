@@ -1,9 +1,7 @@
 from hardwarecheckout import app, socketio
 import sys
+import os
 
 if __name__ == '__main__':
-    try:
-        port = int(sys.argv[1]) 
-    except (IndexError, ValueError):
-        port = 5000
+    port = int(os.getenv("PORT", "5000"))
     socketio.run(app, host='0.0.0.0', port=port)

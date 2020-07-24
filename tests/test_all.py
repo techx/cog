@@ -46,7 +46,7 @@ def user(app):
     user = User(quill_id, 'alyssap@hacker.org', False)
     db.session.add(user)
     db.session.commit()
-    app.set_cookie('localhost:8000', 'jwt', token) 
+    app.set_cookie('localhost:5000', 'jwt', token) 
 
     return user
 
@@ -145,7 +145,7 @@ def test_run_lottery(app, admin, item):
             .join(Request).filter_by(status=RequestStatus.APPROVED).count() == 3
 
 def test_run_all_lotteries(app, admin):
-    for _ in xrange(3):
+    for _ in range(3):
         item = InventoryEntry('Item' + str(_), 'Wow lick my socks', 
             'http://test.co', 'Item', [], '', 3, item_type=ItemType.LOTTERY)        
         db.session.add(item)

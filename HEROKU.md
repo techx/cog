@@ -1,0 +1,2 @@
+# Deploying on Heroku
+After deploying on Heroku, you should go into the console and then run `python initialize.py` to properly set up the database. (WARNING: doing this will clear all existing data in the database)
