@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cog-hackthenorth-com
+  labels:
+    app: cog-hackthenorth-com
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: cog-hackthenorth-com
+  selector:
+    app: cog-hackthenorth-com
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cog-hackthenorth-com
+  labels:
+    app: cog-hackthenorth-com
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cog-hackthenorth-com
+  template:
+    metadata:
+      labels:
+        app: cog-hackthenorth-com
+    spec:
+      volumes:
+        - name: "$CREDENTIALS_SECRET"
+          secret:
+            secretName: "$CREDENTIALS_SECRET"
+      containers:
+      # [START proxy_container]
+      - name: cloudsql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.11
+        command: ["/cloud_sql_proxy",
+                  "-instances=htn-techyon:northamerica-northeast1:main=tcp:5432",
+                  "-credential_file=/secrets/cloudsql/credentials.json"]
+        # [START cloudsql_security_context]
+        securityContext:
+          runAsUser: 2  # non-root user
+          allowPrivilegeEscalation: false
+        # [END cloudsql_security_context]
+        volumeMounts:
+          - name: "$CREDENTIALS_SECRET"
+            mountPath: /secrets/cloudsql
+            readOnly: true
+        resources:
+          limits:
+            cpu: 25m
+            memory: "0.05G"
+      # [END proxy_container]
+      - name: cog-hackthenorth-com
+        image: gcr.io/htn-techyon/cog-hackthenorth-com
+        ports:
+        - containerPort: 80
+        env:
+        - name: ENV
+          value: production
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: "$DB_SECRET"
+              key: password
+        - name: DATABASE_URL
+          value: postgres://postgres:$(DB_PASS)@localhost/cog
+        - name: SECRET
+          value: "$ENV_SECRET"
+        resources:
+          requests:
+            cpu: 30m
+            memory: "0.15G"

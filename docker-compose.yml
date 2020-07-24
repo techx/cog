@@ -1,0 +1,29 @@
+version: "3"
+services:
+  dev_db:
+    image: postgres
+    ports:
+      - 5432
+    environment:
+      - PG_PASSWORD=password
+  cog:
+    container_name: cog
+    image: cog:latest
+    build:
+      context: .
+    environment:
+      - LOGIN_URL=${LOGIN_URL}
+      - ENDPOINT_URL=${ENDPOINT_URL}
+      - DATABASE_URL=${DATABASE_URL}
+      - SECRET=${SECRET}
+      - SLACK_OAUTH_ACCESS_TOKEN=${SLACK_OAUTH_ACCESS_TOKEN}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - FLASK_DEBUG=1
+      - PORT=8000
+    ports:
+      - 127.0.0.1:8000:8000
+    depends_on:
+      - dev_db
+    volumes:
+      - .:/cog

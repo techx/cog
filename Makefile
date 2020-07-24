@@ -1,7 +1,21 @@
-test:
-	python -m pytest tests/
+build:
+	docker-compose build
 
-PORT = 8000
-run:
-	gunicorn --bind 0.0.0.0:$(PORT) -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker hardwarecheckout:app 
+sass:
+	cd cog/static && sass --watch sass/app.scss:css/app.css
+start:
+	docker-compose up -d
+	@echo "cog listening on port 8000, postgres on 5432"
+	@echo "run 'make logs' to watch logs"
 
+stop:
+	docker-compose down
+
+# watch the logs from cog
+logs:
+	docker-compose logs -f -t cog 
+
+# run all the migrations
+migrate:
+	docker-compose run cog python initialize.py
+	# db/containers still running

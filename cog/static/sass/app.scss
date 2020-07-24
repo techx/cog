@@ -1,0 +1,44 @@
+@import './nav.scss';
+@import './inventory.scss';
+@import './modals.scss';
+
+body {
+  padding-top: 60px;
+}
+
+#login-wrapper {
+    max-width: 450px;
+    margin-top: 35px;
+}
+
+#login-form {
+    text-align: left;
+    vertical-align: middle;
+}
+
+.ui.select {
+  border: 1px solid #CCC;
+  border-right-style: none;
+  display: block;
+  background: transparent;
+  border-radius: 3px 0 0 3px;
+}
+
+.footer {
+    color: #777;
+    padding: 3em 0;
+}
+
+
+// courtesy of https://gist.github.com/phuphighter/ce980aaec1c7104846f7e944743a7e07
+/* Mobile */
+@media only screen and (max-width: 767px) {
+  [class*="mobile hidden"],
+  [class*="tablet only"]:not(.mobile),
+  [class*="computer only"]:not(.mobile),
+  [class*="large screen only"]:not(.mobile),
+  [class*="widescreen only"]:not(.mobile),
+  [class*="or lower hidden"] {
+    display: none !important;
+  }
+}

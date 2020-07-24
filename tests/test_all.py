@@ -3,8 +3,8 @@ import os
 TEST_DB="sqlite:///test_db"
 os.environ['DATABASE_URL'] = TEST_DB # sets DB URL for this process 
 
-import hardwarecheckout 
-from hardwarecheckout.config import SECRET
+import cog 
+from cog.config import SECRET
 import unittest
 from jose import jws
 import tempfile
@@ -12,27 +12,27 @@ import random
 import string
 from utils import * 
 
-from hardwarecheckout.models import db
-from hardwarecheckout.models.user import User
-from hardwarecheckout.models.inventory_entry import InventoryEntry
-from hardwarecheckout.models.inventory_entry import ItemType 
-from hardwarecheckout.models.request import Request 
-from hardwarecheckout.models.request import RequestStatus
-from hardwarecheckout.models.request_item import RequestItem
+from cog.models import db
+from cog.models.user import User
+from cog.models.inventory_entry import InventoryEntry
+from cog.models.inventory_entry import ItemType 
+from cog.models.request import Request 
+from cog.models.request import RequestStatus
+from cog.models.request_item import RequestItem
 from flask import url_for, json
 import pytest
 
 @pytest.fixture
 def app():
-    hardwarecheckout.app.config['TESTING'] = True
-    hardwarecheckout.app.config['DEBUG'] = False
-    app = hardwarecheckout.app.test_client()
-    with hardwarecheckout.app.app_context():
+    cog.app.config['TESTING'] = True
+    cog.app.config['DEBUG'] = False
+    app = cog.app.test_client()
+    with cog.app.app_context():
         db.drop_all()
         db.create_all()
-        db.app = hardwarecheckout.app
-        db.init_app(hardwarecheckout.app)
-        ctx = hardwarecheckout.app.test_request_context() 
+        db.app = cog.app
+        db.init_app(cog.app)
+        ctx = cog.app.test_request_context() 
         ctx.push()
         yield app
         ctx.pop()
@@ -41,12 +41,12 @@ def app():
 
 @pytest.fixture
 def user(app):
-    quill_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
-    token = jws.sign(quill_id, SECRET, algorithm='HS256')
-    user = User(quill_id, 'alyssap@hacker.org', False)
+    hackerapi_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
+    token = jws.sign(hackerapi_id, SECRET, algorithm='HS256')
+    user = User(hackerapi_id, 'alyssap@hacker.org', False)
     db.session.add(user)
     db.session.commit()
-    app.set_cookie('localhost:8000', 'jwt', token) 
+    app.set_cookie('localhost:80', 'jwt', token) 
 
     return user
 
@@ -65,7 +65,7 @@ def item(app):
     return item
 
 def test_home(app):
-    with captured_templates(hardwarecheckout.app) as templates:
+    with captured_templates(cog.app) as templates:
         rv = app.get('/', follow_redirects = True)
         assert rv.status_code == 200
         assert len(templates) == 1
@@ -75,24 +75,24 @@ def test_home(app):
         assert len(context['checkout_items']) == 0
         assert len(context['free_items']) == 0
 
-def test_quill_login(app):
-    with captured_templates(hardwarecheckout.app) as templates:
-        rv = quill_login(app, 'admin@example.com', 'party')
+def test_hackerapi_login(app):
+    with captured_templates(cog.app) as templates:
+        rv = hackerapi_login(app, 'admin@example.com', 'party')
         assert rv.status_code == 200
         assert len(templates) == 1
         template, context = templates[0]
         assert template.name == 'pages/inventory.html'
 
-    with captured_templates(hardwarecheckout.app) as templates:
-       rv = quill_login(app, 'admin@example.com', 'prty')
+    with captured_templates(cog.app) as templates:
+       rv = hackerapi_login(app, 'admin@example.com', 'prty')
        assert rv.status_code == 200
        assert len(templates) == 1
        template, context = templates[0]
        assert template.name == 'pages/login.html'
        assert "That's not the right password." in context['error']
 
-    with captured_templates(hardwarecheckout.app) as templates:
-       rv = quill_login(app, 'admin@example.co', 'party')
+    with captured_templates(cog.app) as templates:
+       rv = hackerapi_login(app, 'admin@example.co', 'party')
        assert rv.status_code == 200
        assert len(templates) == 1
        template, context = templates[0]
@@ -122,7 +122,7 @@ def test_add_delete_item(app, admin):
     # TODO: add back check
 
 def test_view_request(app, admin):
-    with captured_templates(hardwarecheckout.app) as templates:
+    with captured_templates(cog.app) as templates:
         rv = app.get('/request', follow_redirects=True)
         template, context = templates[0]
         assert rv.status_code == 200
@@ -145,7 +145,7 @@ def test_run_lottery(app, admin, item):
             .join(Request).filter_by(status=RequestStatus.APPROVED).count() == 3
 
 def test_run_all_lotteries(app, admin):
-    for _ in xrange(3):
+    for _ in range(3):
         item = InventoryEntry('Item' + str(_), 'Wow lick my socks', 
             'http://test.co', 'Item', [], '', 3, item_type=ItemType.LOTTERY)        
         db.session.add(item)
@@ -170,7 +170,7 @@ def test_quantities_correct(app, admin):
             expected_counts - a list of tuples with form
                                 (inventory_entry_name, count)
         """
-        with captured_templates(hardwarecheckout.app) as templates:
+        with captured_templates(cog.app) as templates:
             rv = app.get('/', follow_redirects=True)
             counts = templates[0][1]["counts"]
             for (name, num) in expected_counts:

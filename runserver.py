@@ -1,9 +1,11 @@
-from hardwarecheckout import app, socketio
+from cog import app# , socketio
+from initialize import rebuild 
 import sys
+import os
 
 if __name__ == '__main__':
-    try:
-        port = int(sys.argv[1]) 
-    except (IndexError, ValueError):
-        port = 5000
-    socketio.run(app, host='0.0.0.0', port=port)
+    if os.getenv('ENV', '') == 'test':
+        rebuild()
+    port = int(os.getenv("PORT", "80"))
+    debug = os.getenv("FLASK_DEBUG") == "1"
+    app.run(host='0.0.0.0', port=port, debug=debug)

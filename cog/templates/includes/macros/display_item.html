@@ -1,0 +1,146 @@
+{% macro display_item(item, counts, admin=False, requestable=False) -%}
+{% if counts %}
+<!-- When displaying many of these item macros, can pass in a dictionary of
+     quantity for every item for performance reasons -->
+{% set count = counts.get(item.id, 0) %}
+{% else %}
+{% set count = item.quantity %}
+{% endif %}
+<div class="row inventory-item">
+    <div class="ten wide column">
+        <div class="ui items">
+            <div class="item inventory-item-content">
+                <div class="ui tiny image">
+                    {% if admin and not item.is_visible %}
+                        <div class="ui inverted active dimmer">
+                            <div class="content">
+                                <div class="center">
+                                  <h4 class="ui icon header">
+                                    <i class="hide icon"></i>
+                                  </h4>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <img src="{{ item.image_src }}"/>
+                </div>
+                <div class="middle aligned content">
+                    <a class="header" target="_blank" href="{{ item.link }}">{{ item.name }}</a>
+                    {% if admin %}
+                        <sup>
+                            <a class="header" href="{{ url_for('inventory_display', id=item.id) }}">
+                                <i class="setting link icon"></i>
+                            </a>
+                        </sup>
+                    {% endif %}
+                    <div class="meta">
+                        {% if item.description %}
+                            <span> {{ item.description }} </span>
+                        {% else %}
+                        <!-- maintain spacing if no description lol -->
+                            <span> &nbsp; </span> 
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="six wide right aligned column">
+    {% if requestable %} 
+        {% if item.requires_checkout and (count == 0 and not config['ENABLE_WAITLIST']) %}
+            <div> <strong>Out of stock!</strong> </div> 
+            <br>
+        {% else %}
+            {% if (admin and (item.requires_checkout or item.requires_lottery)) 
+                or (item.requires_checkout and config['DISPLAY_CHECKOUT_QUANTITY']) 
+                or (item.requires_lottery and config['DISPLAY_LOTTERY_QUANTITY']) %}
+                <div> <strong>Quantity:</strong> {{ count }} </div> 
+                <br>
+            {% endif %}
+            {% if item.requires_mlh %}
+                <br>
+                <br>
+                <a href="https://hardware.mlh.io" target="_blank" class="ui primary button">Find on MLH</a>
+            {% endif %}
+            {% if item.requires_checkout and not item.requires_lottery %}
+            <form class="form request-form"  method="post">
+                <div class="ui action input">
+                    <select name="quantity" value="1" class="ui select">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <button data-item-id="{{ item.id }}" type="submit" class="ui primary submit button">
+                    {% if count > 0 %}
+                        Request Now                            
+                    {% else %}
+                        Add To Waitlist
+                    {% endif %}
+                    </button>
+                </div>
+                <div class="ui hidden error message"></div>
+            </form>
+            {% elif item.requires_lottery and not config['LOTTERY_REQUIRES_PROPOSAL'] %}
+            <form class="form request-form" method="post">
+                <div class="ui action input">
+                    {% if config['LOTTERY_MULTIPLE_SUBMISSIONS'] %}
+                        <select name="quantity" value="1" class="ui select">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <button type="submit" data-item-id="{{ item.id }}" 
+                            class="ui primary submit button">Submit</button>
+                    {% else %}
+                        <button type="submit" data-item-id="{{ item.id }}" 
+                            class="ui primary submit button">Submit</button>
+                    {% endif %}
+                </div>                
+                <div class="ui hidden error message"></div>
+            </form>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    </div> <!-- column -->
+</div> <!-- row -->
+{% if item.requires_lottery and requestable and config['LOTTERY_REQUIRES_PROPOSAL'] %}
+<div class="row">
+    <div class="column">
+        <form class="ui form request-form" method="post">
+            <div class="two fields">
+                <div class="twelve wide field">
+                    <label> Lottery Proposal </label>
+                    <input type="text" name="proposal" 
+                        {% if config['LOTTERY_CHAR_LIMIT'] %}
+                            maxlength="{{ config['LOTTERY_CHAR_LIMIT'] }}"
+                        {% endif %}
+                    placeholder="Briefly describe what you plan to make!">
+                </div>
+                <div class="four wide field" style="margin-left: auto;">
+                    {% if config['LOTTERY_MULTIPLE_SUBMISSIONS'] %}
+                        <label> Quantity </label>
+                        <div class="ui action input">
+                            <input type="number" name="quantity" value="1" min="1" max="5"> 
+                            <button type="submit" data-item-id="{{ item.id }}" 
+                                class="ui primary submit button">Submit</button>
+                        </div>
+                    {% else %}
+                        <label>&nbsp;</label>
+                        <div class="ui input">
+                            <button type="submit" data-item-id="{{ item.id }}" 
+                                class="ui primary submit fluid button">Submit</button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="ui error message">
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+{%- endmacro %}
