@@ -9,7 +9,7 @@ cffi==1.10.0
 chardet==3.0.4
 click==6.7
 configparser==3.5.0
-cryptography==1.7.2
+cryptography==3.2
 decorator==4.1.2
 ecdsa==0.13
 enum34==1.1.6
