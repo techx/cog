@@ -12,7 +12,7 @@ class SheetsImportError(Exception):
 def get_csv(u):
     tokens = u.split('/')
 
-    for t, i in zip(tokens, list(range(len(tokens)))):
+    for t, i in zip(tokens, range(len(tokens))):
         if t == 'd':
             id = tokens[i+1]
             break

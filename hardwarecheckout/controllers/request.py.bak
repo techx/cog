@@ -91,7 +91,7 @@ def request_submit():
                 message='Out of stock!'
             )
 
-    for _ in range(requested_quantity):
+    for _ in xrange(requested_quantity):
         item = RequestItem(
             InventoryEntry.query.get(request.form['item_id']),
             1)
@@ -148,7 +148,7 @@ def request_approve(id):
         quantity = request_item.quantity
 
         # get items of proper type
-        for _ in range(quantity):
+        for _ in xrange(quantity):
             if entry.quantity < quantity:
                 return jsonify(
                     success=False,
@@ -184,7 +184,7 @@ def request_fulfill(id):
         quantity = request_item.quantity
 
         # get items of proper type
-        for _ in range(quantity):
+        for _ in xrange(quantity):
             item = Item.query.filter_by(entry_id = entry.id, user = None).first()
             if item == None:
                 return jsonify(

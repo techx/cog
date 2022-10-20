@@ -23,8 +23,8 @@ from werkzeug.datastructures import MultiDict
 
 from sqlalchemy import func
 
-import urllib.request, urllib.error, urllib.parse
-import urllib.parse
+import urllib2
+import urlparse
 import requests
 from bs4 import BeautifulSoup
 
@@ -266,7 +266,7 @@ def inventory_add():
         ) 
 
     errors = '<br>'.join([
-        field.title() + ': ' + ', '.join(error) for field, error in list(form.errors.items())
+        field.title() + ': ' + ', '.join(error) for field, error in form.errors.items()
     ])
     return jsonify(
         success=False,
@@ -310,7 +310,7 @@ def inventory_autoadd():
         else:
             errors = 'Error on row %d:<br>' % (index + 2)
             errors += '<br>'.join([
-                field.title() + ': ' + ', '.join(error) for field, error in list(form.errors.items())
+                field.title() + ': ' + ', '.join(error) for field, error in form.errors.items()
             ])
             return jsonify(
                 success=False,
@@ -357,7 +357,7 @@ def inventory_update(id):
         ) 
 
     errors = '<br>'.join([
-        field.title() + ': ' + ', '.join(error) for field, error in list(form.errors.items())
+        field.title() + ': ' + ', '.join(error) for field, error in form.errors.items()
     ])
     return jsonify(
         success=False,
