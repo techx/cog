@@ -5,7 +5,7 @@ from hardwarecheckout.utils import verify_token
 import requests
 import datetime
 import json
-from urllib.parse import urljoin
+from urlparse import urljoin
 from hardwarecheckout.forms.login_form import LoginForm
 from flask import (
     redirect,
@@ -55,7 +55,7 @@ def login_handler():
         return response
     
     errors = []
-    for field, error in list(form.errors.items()):
+    for field, error in form.errors.items():
         errors.append(field + ": " + "\n".join(error) + "\n")
 
     return render_template('pages/login.html', error=errors)

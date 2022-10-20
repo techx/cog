@@ -62,7 +62,7 @@ def user_update(id):
                 success=True
             ) 
 
-        error_msg = '\n'.join([key.title() + ': ' + ', '.join(value) for key, value in list(form.errors.items())])
+        error_msg = '\n'.join([key.title() + ': ' + ', '.join(value) for key, value in form.errors.items()])
 
         return jsonify(
             success=False,

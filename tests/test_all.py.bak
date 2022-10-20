@@ -145,7 +145,7 @@ def test_run_lottery(app, admin, item):
             .join(Request).filter_by(status=RequestStatus.APPROVED).count() == 3
 
 def test_run_all_lotteries(app, admin):
-    for _ in range(3):
+    for _ in xrange(3):
         item = InventoryEntry('Item' + str(_), 'Wow lick my socks', 
             'http://test.co', 'Item', [], '', 3, item_type=ItemType.LOTTERY)        
         db.session.add(item)
@@ -177,8 +177,8 @@ def test_quantities_correct(app, admin):
                 id_ = InventoryEntry.query.filter_by(name=name).one().id
                 actual_quant = counts.get(id_, 0)
                 if actual_quant != num:
-                    print(("Unexpected quantity {} for item {}".format(actual_quant,
-                                                                      name)))
+                    print("Unexpected quantity {} for item {}".format(actual_quant,
+                                                                      name))
                     return False
         return True
 

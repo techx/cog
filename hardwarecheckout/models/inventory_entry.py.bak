@@ -42,7 +42,7 @@ class InventoryEntry(db.Model):
         self.image_src = image
 
         self.items = []
-        for i in range(int(qty)):
+        for i in xrange(int(qty)):
             self.items.append(
                     Item(self, self.name + " " + str(i+1)))
 
