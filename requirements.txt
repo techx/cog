@@ -4,7 +4,7 @@ backports.functools-lru-cache==1.4
 beautifulsoup4==4.6.0
 blinker==1.4
 bs4==0.0.1
-certifi==2017.4.17
+certifi==2022.12.7
 cffi==1.10.0
 chardet==3.0.4
 click==6.7
